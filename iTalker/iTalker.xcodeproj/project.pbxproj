@@ -1,0 +1,267 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BD5EA64C15DD04BC00255E00 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD5EA64B15DD04BC00255E00 /* UIKit.framework */; };
+		BD5EA64E15DD04BC00255E00 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD5EA64D15DD04BC00255E00 /* Foundation.framework */; };
+		BD5EA65015DD04BC00255E00 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD5EA64F15DD04BC00255E00 /* CoreGraphics.framework */; };
+		BD5EA65615DD04BC00255E00 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD5EA65415DD04BC00255E00 /* InfoPlist.strings */; };
+		BD5EA65815DD04BC00255E00 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BD5EA65715DD04BC00255E00 /* main.m */; };
+		BD5EA65C15DD04BC00255E00 /* ITalkerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD5EA65B15DD04BC00255E00 /* ITalkerAppDelegate.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BD5EA64715DD04BC00255E00 /* iTalker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTalker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD5EA64B15DD04BC00255E00 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BD5EA64D15DD04BC00255E00 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BD5EA64F15DD04BC00255E00 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BD5EA65315DD04BC00255E00 /* iTalker-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iTalker-Info.plist"; sourceTree = "<group>"; };
+		BD5EA65515DD04BC00255E00 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BD5EA65715DD04BC00255E00 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BD5EA65915DD04BC00255E00 /* iTalker-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iTalker-Prefix.pch"; sourceTree = "<group>"; };
+		BD5EA65A15DD04BC00255E00 /* ITalkerAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITalkerAppDelegate.h; sourceTree = "<group>"; };
+		BD5EA65B15DD04BC00255E00 /* ITalkerAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ITalkerAppDelegate.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BD5EA64415DD04BC00255E00 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD5EA64C15DD04BC00255E00 /* UIKit.framework in Frameworks */,
+				BD5EA64E15DD04BC00255E00 /* Foundation.framework in Frameworks */,
+				BD5EA65015DD04BC00255E00 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BD5EA63C15DD04BC00255E00 = {
+			isa = PBXGroup;
+			children = (
+				BD5EA65115DD04BC00255E00 /* iTalker */,
+				BD5EA64A15DD04BC00255E00 /* Frameworks */,
+				BD5EA64815DD04BC00255E00 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BD5EA64815DD04BC00255E00 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BD5EA64715DD04BC00255E00 /* iTalker.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BD5EA64A15DD04BC00255E00 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BD5EA64B15DD04BC00255E00 /* UIKit.framework */,
+				BD5EA64D15DD04BC00255E00 /* Foundation.framework */,
+				BD5EA64F15DD04BC00255E00 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BD5EA65115DD04BC00255E00 /* iTalker */ = {
+			isa = PBXGroup;
+			children = (
+				BD5EA65A15DD04BC00255E00 /* ITalkerAppDelegate.h */,
+				BD5EA65B15DD04BC00255E00 /* ITalkerAppDelegate.m */,
+				BD5EA65215DD04BC00255E00 /* Supporting Files */,
+			);
+			path = iTalker;
+			sourceTree = "<group>";
+		};
+		BD5EA65215DD04BC00255E00 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BD5EA65315DD04BC00255E00 /* iTalker-Info.plist */,
+				BD5EA65415DD04BC00255E00 /* InfoPlist.strings */,
+				BD5EA65715DD04BC00255E00 /* main.m */,
+				BD5EA65915DD04BC00255E00 /* iTalker-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BD5EA64615DD04BC00255E00 /* iTalker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD5EA65F15DD04BC00255E00 /* Build configuration list for PBXNativeTarget "iTalker" */;
+			buildPhases = (
+				BD5EA64315DD04BC00255E00 /* Sources */,
+				BD5EA64415DD04BC00255E00 /* Frameworks */,
+				BD5EA64515DD04BC00255E00 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iTalker;
+			productName = iTalker;
+			productReference = BD5EA64715DD04BC00255E00 /* iTalker.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BD5EA63E15DD04BC00255E00 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = ITalker;
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = cmcc;
+			};
+			buildConfigurationList = BD5EA64115DD04BC00255E00 /* Build configuration list for PBXProject "iTalker" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BD5EA63C15DD04BC00255E00;
+			productRefGroup = BD5EA64815DD04BC00255E00 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BD5EA64615DD04BC00255E00 /* iTalker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BD5EA64515DD04BC00255E00 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD5EA65615DD04BC00255E00 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BD5EA64315DD04BC00255E00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD5EA65815DD04BC00255E00 /* main.m in Sources */,
+				BD5EA65C15DD04BC00255E00 /* ITalkerAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BD5EA65415DD04BC00255E00 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BD5EA65515DD04BC00255E00 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BD5EA65D15DD04BC00255E00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BD5EA65E15DD04BC00255E00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BD5EA66015DD04BC00255E00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iTalker/iTalker-Prefix.pch";
+				INFOPLIST_FILE = "iTalker/iTalker-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		BD5EA66115DD04BC00255E00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iTalker/iTalker-Prefix.pch";
+				INFOPLIST_FILE = "iTalker/iTalker-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BD5EA64115DD04BC00255E00 /* Build configuration list for PBXProject "iTalker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD5EA65D15DD04BC00255E00 /* Debug */,
+				BD5EA65E15DD04BC00255E00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BD5EA65F15DD04BC00255E00 /* Build configuration list for PBXNativeTarget "iTalker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD5EA66015DD04BC00255E00 /* Debug */,
+				BD5EA66115DD04BC00255E00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BD5EA63E15DD04BC00255E00 /* Project object */;
+}
