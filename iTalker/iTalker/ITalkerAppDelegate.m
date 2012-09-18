@@ -7,19 +7,18 @@
 //
 
 #import "ITalkerAppDelegate.h"
+#import "ITalkerChatRoomViewController.h"
 
 @implementation ITalkerAppDelegate
 
-- (void)dealloc
-{
-    [_window release];
-    [super dealloc];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    ITalkerChatRoomViewController * mainViewController = [[ITalkerChatRoomViewController alloc] initWithNibName:@"ITalkerChatRoomViewController" bundle:nil];
+    [self.window setRootViewController:mainViewController];
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
