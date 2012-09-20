@@ -10,4 +10,12 @@
 
 @interface ITalkerUserInfo : NSObject
 
+@property (strong, nonatomic) NSString * userId;
+@property (strong, nonatomic) NSString * userName;
+@property (strong, nonatomic) NSString * IpAddr;
+
+- (NSDictionary *)serialize;
+
+- (BOOL)deserialize:(NSDictionary *)data;
+
 @end

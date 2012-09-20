@@ -7,7 +7,7 @@
 //
 
 #import "ITalkerChatRoomViewController.h"
-#import "ITalkerNetworkEngine.h"
+#import "ITalkerUdpNetworkEngine.h"
 
 @interface ITalkerChatRoomViewController ()
 
@@ -16,12 +16,13 @@
 @implementation ITalkerChatRoomViewController
 
 @synthesize chatInputField = _chatInputField;
+@synthesize chatDisplayView = _chatDisplayView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [[ITalkerNetworkEngine getInstance] bindPort:12345];
+
     }
     return self;
 }
@@ -29,14 +30,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -46,9 +44,13 @@
 
 - (IBAction)handleSendButtonClicked:(id)sender
 {
-    NSString * content = _chatInputField.text;
-    
-    [[ITalkerNetworkEngine getInstance] broadcastUdpData:[content dataUsingEncoding:NSUTF8StringEncoding]];
+
+}
+
+- (void)handleUdpData:(NSData *)data
+{
+    NSString * dataStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    _chatDisplayView.text = [NSString stringWithFormat:@"%@\n%@", _chatDisplayView.text, dataStr];
 }
 
 @end

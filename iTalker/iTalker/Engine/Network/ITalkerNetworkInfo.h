@@ -7,22 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Reachability.h"
 
 @class Reachability;
 
-@interface NetworkInfo : NSObject {
+@interface ITalkerNetworkInfo : NSObject {
 
 	Reachability *wifiReach;
-  Reachability *internetReach;
+    Reachability *internetReach;
 
 }
 
-+ (NetworkInfo *)getInstance;
++ (ITalkerNetworkInfo *)getInstance;
 - (BOOL) startWifiNotifierWithObserver:(id)observer selector:(SEL)aSelector;
 - (void) stopWifiNotifierWithObserver:(id)observer;
 - (NSString *) getWiFiSSID; 
-- (in_addr_t) getWiFiIPAddresses;
-- (NetworkStatus) getWiFIReachability;
-- (NetworkStatus) getInternetReachability;
+- (NSString *) getWiFiIPAddresses;
+
 @end

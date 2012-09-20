@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ITalkerChatRoomViewController : UIViewController
+#import "ITalkerUdpNetworkEngine.h"
+
+@interface ITalkerChatRoomViewController : UIViewController <ITalkerUdpNetworkDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField * chatInputField;
+
+@property (strong, nonatomic) IBOutlet UITextView * chatDisplayView;
 
 - (IBAction)handleSendButtonClicked:(id)sender;
 

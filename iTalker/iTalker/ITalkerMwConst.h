@@ -9,6 +9,6 @@
 #ifndef iTalker_ITalkerMwConst_h
 #define iTalker_ITalkerMwConst_h
 
-
+#define kUserObserverPort                       10000
 
 #endif

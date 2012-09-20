@@ -10,4 +10,38 @@
 
 @implementation ITalkerUserInfo
 
+#define kUserInfoKeyUserId          @"userid"
+#define kUserInfoKeyUserName        @"username"
+#define kUserInfoKeyIpAddress       @"ipaddr"
+
+- (NSDictionary *)serialize
+{
+    if (_userId && _userName && _IpAddr) {
+        __autoreleasing NSDictionary * outData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                  _userId, kUserInfoKeyUserId,
+                                                  _userName, kUserInfoKeyUserName,
+                                                  _IpAddr, kUserInfoKeyIpAddress,
+                                                  nil];
+        return outData;
+    }
+    return nil;
+}
+
+- (BOOL)deserialize:(NSDictionary *)data
+{
+    if (data != nil) {
+        NSString * userid = [data objectForKey:kUserInfoKeyUserId];
+        NSString * name = [data objectForKey:kUserInfoKeyUserName];
+        NSString * ip = [data objectForKey:kUserInfoKeyIpAddress];
+        
+        if (userid && name && ip) {
+            self.userId = userid;
+            self.userName = name;
+            self.IpAddr = ip;
+            return YES;
+        }
+    }
+    return NO;
+}
+
 @end

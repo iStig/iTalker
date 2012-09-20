@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ITalkerFriendListViewController : UIViewController
+#import "ITalkerUserObserver.h"
+
+@interface ITalkerFriendListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ITalkerUserEventDelegate> {
+    NSMutableArray * _friendArray;
+}
+
+@property (strong, nonatomic) IBOutlet UITableView * tableView;
 
 @end

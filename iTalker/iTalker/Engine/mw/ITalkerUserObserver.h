@@ -8,6 +8,32 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ITalkerUserObserver : NSObject
+#import "ITalkerUdpNetworkEngine.h"
+
+@class ITalkerUserInfo;
+
+typedef enum {
+    ITalkerUserObserverUserAdded,
+    ITalkerUserObserverUserRemoved
+} ITalkerUserObserverEvent;
+
+@protocol ITalkerUserEventDelegate <NSObject>
+
+@optional
+- (void)handleUserObserverEvent:(ITalkerUserObserverEvent)event AndUserInfo:(ITalkerUserInfo *)userInfo;
+
+@end
+
+@interface ITalkerUserObserver : NSObject <ITalkerUdpNetworkDelegate> {
+    ITalkerUdpNetworkEngine * _udpNetworkEngine;
+}
+
++ (ITalkerUserObserver *)getInstance;
+
+- (void)startObserve;
+
+- (void)publishUser:(ITalkerUserInfo *)userInfo;
+
+@property (assign, nonatomic) id<ITalkerUserEventDelegate> userEventDelegate;
 
 @end

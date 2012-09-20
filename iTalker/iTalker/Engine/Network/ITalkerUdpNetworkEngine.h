@@ -9,24 +9,24 @@
 #import <Foundation/Foundation.h>
 #import "AsyncUdpSocket.h"
 
-@protocol ITalkerNetworkDelegate <NSObject>
+@protocol ITalkerUdpNetworkDelegate <NSObject>
 
 @optional
 - (void)handleUdpData:(NSData *)data;
 
 @end
 
-@interface ITalkerNetworkEngine : NSObject <AsyncUdpSocketDelegate>{
+@interface ITalkerUdpNetworkEngine : NSObject <AsyncUdpSocketDelegate> {
     AsyncUdpSocket * _udpSocket;
     UInt16 _currentPort;
 }
 
-+ (ITalkerNetworkEngine *)getInstance;
-
 - (BOOL)bindPort:(UInt16)port;
+
+- (void)waitForData;
 
 - (BOOL)broadcastUdpData:(NSData *)data;
 
-@property (strong, nonatomic) id<>
+@property (assign, nonatomic) id<ITalkerUdpNetworkDelegate> networkDelegate;
 
 @end

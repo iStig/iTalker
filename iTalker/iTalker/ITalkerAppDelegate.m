@@ -8,6 +8,7 @@
 
 #import "ITalkerAppDelegate.h"
 #import "ITalkerChatRoomViewController.h"
+#import "ITalkerFriendListViewController.h"
 
 @implementation ITalkerAppDelegate
 
@@ -16,7 +17,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    ITalkerChatRoomViewController * mainViewController = [[ITalkerChatRoomViewController alloc] initWithNibName:@"ITalkerChatRoomViewController" bundle:nil];
+    ITalkerFriendListViewController * mainViewController = [[ITalkerFriendListViewController alloc] initWithNibName:@"ITalkerFriendListViewController" bundle:nil];
     [self.window setRootViewController:mainViewController];
     
     self.window.backgroundColor = [UIColor whiteColor];

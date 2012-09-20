@@ -7,6 +7,9 @@
 //
 
 #import "ITalkerFriendListViewController.h"
+#import "ITalkerUserObserver.h"
+#import "ITalkerUserInfo.h"
+#import "ITalkerNetworkInfo.h"
 
 @interface ITalkerFriendListViewController ()
 
@@ -18,7 +21,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        _friendArray = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -26,19 +29,73 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    [_tableView setDataSource:self];
+    [_tableView setDelegate:self];
+    
+    ITalkerUserObserver * observer = [ITalkerUserObserver getInstance];
+    [observer setUserEventDelegate:self];
+    [observer startObserve];
+    ITalkerUserInfo * userInfo = [[ITalkerUserInfo alloc] init];
+    userInfo.userId = @"12345";
+    userInfo.userName = @"Friend";
+    userInfo.IpAddr = [[ITalkerNetworkInfo getInstance] getWiFiIPAddresses];
+    
+    [[ITalkerUserObserver getInstance] publishUser:userInfo];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)handleUserObserverEvent:(ITalkerUserObserverEvent)event AndUserInfo:(ITalkerUserInfo *)userInfo
+{
+    if (userInfo == nil) {
+        return;
+    }
+    
+    switch (event) {
+        case ITalkerUserObserverUserAdded: {
+            NSString * user = [NSString stringWithFormat:@"%@ : %@", userInfo.userName, userInfo.IpAddr];
+            [_friendArray addObject:user];
+            
+            NSArray * array = [NSArray arrayWithObjects:[NSIndexPath indexPathForRow:(_friendArray.count - 1) inSection:0], nil];
+            
+            [_tableView beginUpdates];
+            [_tableView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
+            [_tableView endUpdates];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+#pragma mark - table view data source delegate
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_friendArray count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString * friendListCellIdentifier = @"FriendListCellIdentifier";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:friendListCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:friendListCellIdentifier];
+    }
+
+    if (indexPath && indexPath.section == 0 && indexPath.row < _friendArray.count) {
+        cell.textLabel.text = [_friendArray objectAtIndex:indexPath.row];
+    }
+    
+    return cell;
 }
 
 @end

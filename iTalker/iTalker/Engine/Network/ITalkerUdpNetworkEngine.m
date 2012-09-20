@@ -6,33 +6,15 @@
 //  Copyright (c) 2012年 cmcc. All rights reserved.
 //
 
-#import "ITalkerNetworkEngine.h"
+#import "ITalkerUdpNetworkEngine.h"
 
 #define BindPortTag         1
 #define SendUdpTag          2
 #define SendDataTimeOut     30
 
-@implementation ITalkerNetworkEngine
+@implementation ITalkerUdpNetworkEngine
 
-static ITalkerNetworkEngine * instance = nil;
-
-+ (ITalkerNetworkEngine *)getInstance
-{
-    if (instance == nil) {
-        instance = [[super allocWithZone:NULL] init];
-    }
-    return instance;
-}
-
-+ (id)allocWithZone:(NSZone *)zone
-{
-    return [self getInstance];
-}
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
+@synthesize networkDelegate = _networkDelegate;
 
 - (id)init
 {
@@ -58,12 +40,21 @@ static ITalkerNetworkEngine * instance = nil;
     }
     
     _currentPort = port;
-    [_udpSocket receiveWithTimeout:-1 tag:BindPortTag];
+
     return YES;
+}
+
+- (void)waitForData
+{
+    [_udpSocket receiveWithTimeout:-1 tag:BindPortTag];
 }
 
 - (BOOL)broadcastUdpData:(NSData *)data
 {
+    if (data == nil) {
+        return NO;
+    }
+    
     NSError * err = nil;
     [_udpSocket enableBroadcast:YES error:&err];
     if (err) {
@@ -79,11 +70,13 @@ static ITalkerNetworkEngine * instance = nil;
     NSLog(@"receive udp data");
     
     if (tag == BindPortTag) {
-        
+        if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleUdpData:)]) {
+            [_networkDelegate handleUdpData:data];
+        }
+        return YES;
     }
-    
-    [_udpSocket receiveWithTimeout:-1 tag:BindPortTag];
-    return YES;
+
+    return NO;
 }
 
 @end
