@@ -27,6 +27,8 @@
 
 - (BOOL)broadcastUdpData:(NSData *)data;
 
+- (BOOL)sendUdpData:(NSData *)data ToHost:(NSString *)hostIpAddr;
+
 @property (assign, nonatomic) id<ITalkerUdpNetworkDelegate> networkDelegate;
 
 @end

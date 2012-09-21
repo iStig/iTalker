@@ -11,10 +11,12 @@
 #import "JSONKit.h"
 #import "ITalkerMwConst.h"
 #import "ITalkerUserInfo.h"
+#import "ITalkerUserManager.h"
 
 #define kPublishInfoKeyType                     @"type"
 #define kPublishInfoValueTypeAddUser            @"adduser"
 #define kPublishInfoValueTypeRemoveUser         @"removeuser"
+#define kPublishInfoValueTypeAlreadyOnlineUser  @"alreadyonlineuser"
 
 #define kPublishInfoKeyUserInfo                 @"userinfo"
 
@@ -32,12 +34,12 @@ static ITalkerUserObserver * instance = nil;
 
 + (id)allocWithZone:(NSZone *)zone
 {
-    return [self getInstance];
+    return [ITalkerUserObserver getInstance];
 }
 
 + (id)copyWithZone:(NSZone *)zone
 {
-    return self;
+    return [ITalkerUserObserver getInstance];
 }
 
 - (id)init
@@ -56,8 +58,9 @@ static ITalkerUserObserver * instance = nil;
     [_udpNetworkEngine waitForData];
 }
 
-- (void)publishUser:(ITalkerUserInfo *)userInfo
+- (void)publishUser
 {
+    ITalkerUserInfo * userInfo = [ITalkerUserManager currentUser];
     if (userInfo == nil) {
         return;
     }
@@ -66,7 +69,8 @@ static ITalkerUserObserver * instance = nil;
 }
 
 - (void)handleUdpData:(NSData *)data
-{    
+{
+    [_udpNetworkEngine waitForData];
     if (data && _userEventDelegate && [_userEventDelegate respondsToSelector:@selector(handleUserObserverEvent:AndUserInfo:)]) {
 
         JSONDecoder * jsonDecoder = [JSONDecoder decoder];
@@ -74,9 +78,13 @@ static ITalkerUserObserver * instance = nil;
         
         if (userEventDic) {
             NSString * type = [userEventDic objectForKey:kPublishInfoKeyType];
+            if (type == nil) {
+                return;
+            }
             
             ITalkerUserObserverEvent event;
-            if ([type compare:kPublishInfoValueTypeAddUser options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+            if ([type compare:kPublishInfoValueTypeAddUser options:NSCaseInsensitiveSearch] == NSOrderedSame ||
+                [type compare:kPublishInfoValueTypeAlreadyOnlineUser options:NSCaseInsensitiveSearch] == NSOrderedSame) {
                 event = ITalkerUserObserverUserAdded;
             } else {
                 event = ITalkerUserObserverUserRemoved;
@@ -86,12 +94,16 @@ static ITalkerUserObserver * instance = nil;
             if (userInfoDic) {
                 ITalkerUserInfo * userInfo = [[ITalkerUserInfo alloc] init];
                 [userInfo deserialize:userInfoDic];
+                
+                ITalkerUserInfo * currentUserInfo = [ITalkerUserManager currentUser];
                 [_userEventDelegate handleUserObserverEvent:event AndUserInfo:userInfo];
+                
+                if ([type compare:kPublishInfoValueTypeAddUser options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+                    [_udpNetworkEngine sendUdpData:[self composePublishInfo:currentUserInfo WithType:kPublishInfoValueTypeAlreadyOnlineUser] ToHost:userInfo.IpAddr];
+                }
             }
         }
     }
-    
-    [_udpNetworkEngine waitForData];
 }
 
 - (NSData *)composePublishInfo:(ITalkerUserInfo *)userInfo WithType:(NSString *)publishType

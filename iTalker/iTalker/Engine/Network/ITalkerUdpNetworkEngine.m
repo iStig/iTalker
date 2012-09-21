@@ -7,10 +7,12 @@
 //
 
 #import "ITalkerUdpNetworkEngine.h"
+#import "ITalkerNetworkInfo.h"
+#import "ITalkerMwConst.h"
 
 #define BindPortTag         1
 #define SendUdpTag          2
-#define SendDataTimeOut     30
+
 
 @implementation ITalkerUdpNetworkEngine
 
@@ -62,7 +64,16 @@
         return NO;
     }
     
-    return [_udpSocket sendData:data toHost:@"255.255.255.255" port:_currentPort withTimeout:SendDataTimeOut tag:SendUdpTag];
+    return [_udpSocket sendData:data toHost:@"255.255.255.255" port:_currentPort withTimeout:kNetworkSendDataTimeOut tag:SendUdpTag];
+}
+
+- (BOOL)sendUdpData:(NSData *)data ToHost:(NSString *)hostIpAddr
+{
+    if (data == nil) {
+        return NO;
+    }
+    
+    return [_udpSocket sendData:data toHost:hostIpAddr port:_currentPort withTimeout:kNetworkSendDataTimeOut tag:SendUdpTag];
 }
 
 - (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:(UInt16)port
@@ -70,6 +81,11 @@
     NSLog(@"receive udp data");
     
     if (tag == BindPortTag) {
+        
+        if (host && [host compare:[[ITalkerNetworkInfo getInstance] getWiFiIPAddresses]] == NSOrderedSame) {
+            return NO;
+        }
+        
         if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleUdpData:)]) {
             [_networkDelegate handleUdpData:data];
         }

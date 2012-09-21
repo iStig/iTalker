@@ -9,7 +9,6 @@
 #import "ITalkerFriendListViewController.h"
 #import "ITalkerUserObserver.h"
 #import "ITalkerUserInfo.h"
-#import "ITalkerNetworkInfo.h"
 
 @interface ITalkerFriendListViewController ()
 
@@ -35,12 +34,7 @@
     ITalkerUserObserver * observer = [ITalkerUserObserver getInstance];
     [observer setUserEventDelegate:self];
     [observer startObserve];
-    ITalkerUserInfo * userInfo = [[ITalkerUserInfo alloc] init];
-    userInfo.userId = @"12345";
-    userInfo.userName = @"Friend";
-    userInfo.IpAddr = [[ITalkerNetworkInfo getInstance] getWiFiIPAddresses];
-    
-    [[ITalkerUserObserver getInstance] publishUser:userInfo];
+    [observer publishUser];
 }
 
 - (void)viewDidUnload

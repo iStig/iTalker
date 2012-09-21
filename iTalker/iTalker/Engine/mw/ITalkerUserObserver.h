@@ -32,7 +32,7 @@ typedef enum {
 
 - (void)startObserve;
 
-- (void)publishUser:(ITalkerUserInfo *)userInfo;
+- (void)publishUser;
 
 @property (assign, nonatomic) id<ITalkerUserEventDelegate> userEventDelegate;
 
