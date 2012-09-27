@@ -7,15 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ITalkerChatEngine.h"
 
-#import "ITalkerUdpNetworkEngine.h"
+@class ITalkerUserInfo;
 
-@interface ITalkerChatRoomViewController : UIViewController <ITalkerUdpNetworkDelegate>
+@interface ITalkerChatViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ITalkerChatDelegate> {
+    NSMutableArray * _chatContentArray;
+}
+
+@property (strong, nonatomic) ITalkerUserInfo * chatToUserInfo;
+
+@property (strong, nonatomic) IBOutlet UITableView * chatTableView;
 
 @property (strong, nonatomic) IBOutlet UITextField * chatInputField;
 
-@property (strong, nonatomic) IBOutlet UITextView * chatDisplayView;
-
 - (IBAction)handleSendButtonClicked:(id)sender;
+
+- (IBAction)handleSpeechButtonClicked:(id)sender;
 
 @end

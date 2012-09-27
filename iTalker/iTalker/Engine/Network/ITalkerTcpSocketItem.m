@@ -6,8 +6,24 @@
 //  Copyright (c) 2012年 cmcc. All rights reserved.
 //
 
-#import "ITalkerTcpNetworkItem.h"
+#import "ITalkerTcpSocketItem.h"
 
-@implementation ITalkerTcpNetworkItem
+@implementation ITalkerTcpSocketItem
+
+- (BOOL)isEqualById:(ITalkerTcpSocketId)socketId;
+{
+    if (_socketId == socketId) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isEqualBySocket:(AsyncSocket *)socket
+{
+    if ([_socket isEqual:socket]) {
+        return YES;
+    }
+    return NO;
+}
 
 @end

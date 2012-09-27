@@ -10,4 +10,23 @@
 
 @implementation ITalkerTextChatContent
 
+- (id)init
+{
+    self = [super initWithType:ITalkerChatContentTypeText];
+    if (self) {
+        
+    }
+    
+    return self;
+}
+
+- (id)initWIthData:(NSData *)data
+{
+    self = [self init];
+    if (self) {
+        _textContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
+    return self;
+}
+
 @end

@@ -6,12 +6,12 @@
 //  Copyright (c) 2012年 cmcc. All rights reserved.
 //
 
-#ifndef iTalker_ITalkerMwConst_h
-#define iTalker_ITalkerMwConst_h
+#ifndef iTalker_ITalkerConst_h
+#define iTalker_ITalkerConst_h
 
 #define kUserObserverPort                           10000
 #define kChatAcceptPort                             10001
 
-#define kNetworkSendDataTimeOut                     30
+#define kNetworkTimeOut                             30
 
 #endif

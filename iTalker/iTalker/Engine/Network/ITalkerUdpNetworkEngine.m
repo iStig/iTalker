@@ -8,7 +8,7 @@
 
 #import "ITalkerUdpNetworkEngine.h"
 #import "ITalkerNetworkInfo.h"
-#import "ITalkerMwConst.h"
+#import "ITalkerConst.h"
 
 #define BindPortTag         1
 #define SendUdpTag          2
@@ -64,7 +64,7 @@
         return NO;
     }
     
-    return [_udpSocket sendData:data toHost:@"255.255.255.255" port:_currentPort withTimeout:kNetworkSendDataTimeOut tag:SendUdpTag];
+    return [_udpSocket sendData:data toHost:@"255.255.255.255" port:_currentPort withTimeout:kNetworkTimeOut tag:SendUdpTag];
 }
 
 - (BOOL)sendUdpData:(NSData *)data ToHost:(NSString *)hostIpAddr
@@ -73,7 +73,7 @@
         return NO;
     }
     
-    return [_udpSocket sendData:data toHost:hostIpAddr port:_currentPort withTimeout:kNetworkSendDataTimeOut tag:SendUdpTag];
+    return [_udpSocket sendData:data toHost:hostIpAddr port:_currentPort withTimeout:kNetworkTimeOut tag:SendUdpTag];
 }
 
 - (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:(UInt16)port

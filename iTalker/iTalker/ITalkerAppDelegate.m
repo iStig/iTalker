@@ -7,29 +7,35 @@
 //
 
 #import "ITalkerAppDelegate.h"
-#import "ITalkerChatRoomViewController.h"
+#import "ITalkerChatViewController.h"
 #import "ITalkerFriendListViewController.h"
 #import "ITalkerNetworkInfo.h"
 #import "ITalkerUserInfo.h"
 #import "ITalkerUserManager.h"
+#import "ITalkerChatEngine.h"
 
 @implementation ITalkerAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //TODO do these after login
     _userManager = [[ITalkerUserManager alloc] init];
-    
+    [ITalkerChatEngine getInstance];
     ITalkerUserInfo * userInfo = [[ITalkerUserInfo alloc] init];
     userInfo.userId = @"12345";
     userInfo.userName = @"Friend";
     userInfo.IpAddr = [[ITalkerNetworkInfo getInstance] getWiFiIPAddresses];
-    
     [_userManager setCurrentUser:userInfo];
+    //TODO
+    
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     ITalkerFriendListViewController * mainViewController = [[ITalkerFriendListViewController alloc] initWithNibName:@"ITalkerFriendListViewController" bundle:nil];
-    [self.window setRootViewController:mainViewController];
+    
+    UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+
+    [self.window setRootViewController:navigationController];
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

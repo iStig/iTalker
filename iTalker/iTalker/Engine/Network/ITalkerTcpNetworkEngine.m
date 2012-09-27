@@ -7,9 +7,11 @@
 //
 
 #import "ITalkerTcpNetworkEngine.h"
-#import "ITalkerMwConst.h"
+#import "ITalkerConst.h"
 
 #define kSendTcpTag             1
+
+static NSInteger staticIdCount = 0;
 
 @implementation ITalkerTcpNetworkEngine
 
@@ -17,7 +19,8 @@
 {
     self = [super init];
     if (self) {
-        _tcpSocket = [[AsyncSocket alloc] initWithDelegate:self];
+        _socketItemArray = [[NSMutableArray alloc] init];
+        _listenSocket = [[AsyncSocket alloc] initWithDelegate:self];
     }
     
     return self;
@@ -25,17 +28,54 @@
 
 - (BOOL)acceptPort:(UInt16)port
 {
-    return [_tcpSocket acceptOnPort:port error:nil];
+    return [_listenSocket acceptOnPort:port error:nil];
 }
 
-- (BOOL)connectHost:(NSString *)hostIpAddr onPort:(UInt16)port
+- (ITalkerTcpSocketId)connectHost:(NSString *)hostIpAddr OnPort:(UInt16)port;
 {
-    return [_tcpSocket connectToHost:hostIpAddr onPort:port withTimeout:kNetworkSendDataTimeOut error:nil];
+    AsyncSocket * socket = [[AsyncSocket alloc] initWithDelegate:self];
+    if ([socket connectToHost:hostIpAddr onPort:port withTimeout:kNetworkTimeOut error:nil]) {
+        ITalkerTcpSocketItem * newItem = [[ITalkerTcpSocketItem alloc] initWithSocket:socket AndId:staticIdCount++];
+        [_socketItemArray addObject:newItem];
+        return newItem.socketId;
+    }
+    return kITalkerInvalidSocketId;
 }
 
-- (void)sendData:(NSData *)data ToHost:(NSString *)hostIpAddr
+- (void)sendData:(NSData *)data FromSocketById:(ITalkerTcpSocketId)socketId;
 {
-    [_tcpSocket writeData:data withTimeout:kNetworkSendDataTimeOut tag:kSendTcpTag];
+    ITalkerTcpSocketItem * item = [self findSocketItemById:socketId];
+    if (item) {
+        [item.socket writeData:data withTimeout:kNetworkTimeOut tag:kSendTcpTag];
+    }
+}
+
+- (void)disconnectSocketById:(ITalkerTcpSocketId)socketId;
+{
+    ITalkerTcpSocketItem * item = [self findSocketItemById:socketId];
+    if (item) {
+        [item.socket disconnect];
+    }
+}
+
+- (ITalkerTcpSocketItem *)findSocketItemById:(ITalkerTcpSocketId)socketId
+{
+    for (ITalkerTcpSocketItem * item in _socketItemArray) {
+        if ([item isEqualById:socketId]) {
+            return item;
+        }
+    }
+    return nil;
+}
+
+- (ITalkerTcpSocketItem *)findSocketItemBySocket:(AsyncSocket *)socket
+{
+    for (ITalkerTcpSocketItem * item in _socketItemArray) {
+        if ([item isEqualBySocket:socket]) {
+            return item;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - AsyncSocketDelegate
@@ -47,17 +87,34 @@
 
 - (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket
 {
-    
+    if (sock && [sock isEqual:_listenSocket]) {
+        ITalkerTcpSocketItem * newItem = [[ITalkerTcpSocketItem alloc] initWithSocket:newSocket AndId:staticIdCount++];
+        [_socketItemArray addObject:newItem];
+        
+        if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleAcceptNewSocket:)]) {
+            [_networkDelegate handleAcceptNewSocket:newItem.socketId];
+        }
+    }
 }
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
-    
+    if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleTcpEvent:ForSocketId:)]) {
+        ITalkerTcpSocketItem * item = [self findSocketItemBySocket:sock];
+        if (item) {
+            [_networkDelegate handleTcpEvent:ITalkerTcpNetworkEventConnected ForSocketId:item.socketId];
+        }
+    }
 }
 
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
-    
+    if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleTcpData:FromSocketId:)]) {
+        ITalkerTcpSocketItem * item = [self findSocketItemBySocket:sock];
+        if (item) {
+            [_networkDelegate handleTcpData:data FromSocketId:item.socketId];
+        }
+    }
 }
 
 - (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag

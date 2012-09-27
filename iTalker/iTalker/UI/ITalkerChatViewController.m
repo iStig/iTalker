@@ -6,17 +6,11 @@
 //  Copyright (c) 2012年 cmcc. All rights reserved.
 //
 
-#import "ITalkerChatRoomViewController.h"
+#import "ITalkerChatViewController.h"
 #import "ITalkerUdpNetworkEngine.h"
+#import "ITalkerUserInfo.h"
 
-@interface ITalkerChatRoomViewController ()
-
-@end
-
-@implementation ITalkerChatRoomViewController
-
-@synthesize chatInputField = _chatInputField;
-@synthesize chatDisplayView = _chatDisplayView;
+@implementation ITalkerChatViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -30,6 +24,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [_chatTableView setDelegate:self];
+    [_chatTableView setDataSource:self];
 }
 
 - (void)viewDidUnload
@@ -42,15 +38,33 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (IBAction)handleSendButtonClicked:(id)sender
+- (IBAction)handleSpeechButtonClicked:(id)sender
 {
 
 }
 
-- (void)handleUdpData:(NSData *)data
+- (IBAction)handleSendButtonClicked:(id)sender
 {
-    NSString * dataStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-    _chatDisplayView.text = [NSString stringWithFormat:@"%@\n%@", _chatDisplayView.text, dataStr];
+    if (_chatToUserInfo != nil) {
+        ITalkerChatEngine * chatEngine = [ITalkerChatEngine getInstance];
+        [chatEngine startChatWith:_chatToUserInfo];
+    }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_chatContentArray count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString * chatContentListCellIdentifier = @"ChatContentListCellIdentifier";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:chatContentListCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:chatContentListCellIdentifier];
+    }
+    
+    return cell;
 }
 
 @end

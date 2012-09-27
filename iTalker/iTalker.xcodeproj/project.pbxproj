@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		BD097E1F160C0E0700C10882 /* ITalkerTcpNetworkEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = BD097E1E160C0E0700C10882 /* ITalkerTcpNetworkEngine.m */; };
-		BD097E23160C53E900C10882 /* ITalkerChatEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = BD097E22160C53E900C10882 /* ITalkerChatEngine.m */; };
-		BD4F4ABD160B1AE3001C0AFA /* ITalkerUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4F4ABC160B1AE3001C0AFA /* ITalkerUserManager.m */; };
 		BD5EA64C15DD04BC00255E00 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD5EA64B15DD04BC00255E00 /* UIKit.framework */; };
 		BD5EA64E15DD04BC00255E00 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD5EA64D15DD04BC00255E00 /* Foundation.framework */; };
 		BD5EA65015DD04BC00255E00 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD5EA64F15DD04BC00255E00 /* CoreGraphics.framework */; };
@@ -21,27 +19,28 @@
 		BD6E735315EE1303003E8204 /* ITalkerVoiceEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6E735215EE1303003E8204 /* ITalkerVoiceEngine.m */; };
 		BD6E735715EE1790003E8204 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD6E735615EE1790003E8204 /* CFNetwork.framework */; };
 		BD9F47C115EF1242008FF75E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9F47C015EF1242008FF75E /* AVFoundation.framework */; };
+		BDAF9DA316143EF80018CF22 /* ITalkerTcpSocketItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDAF9DA216143EF80018CF22 /* ITalkerTcpSocketItem.m */; };
+		BDAF9DA9161459200018CF22 /* ITalkerTextChatContent.m in Sources */ = {isa = PBXBuildFile; fileRef = BDAF9DA8161459200018CF22 /* ITalkerTextChatContent.m */; };
 		BDB8188A160AE52400CF2900 /* ITalkerFriendListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB81888160AE52400CF2900 /* ITalkerFriendListViewController.m */; };
 		BDB8188B160AE52400CF2900 /* ITalkerFriendListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDB81889160AE52400CF2900 /* ITalkerFriendListViewController.xib */; };
 		BDBC700215F4860B009495B4 /* ITalkerVoiceFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDBC700115F4860B009495B4 /* ITalkerVoiceFileManager.m */; };
 		BDBC700615F48642009495B4 /* ITalkerUdpNetworkEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = BDBC700515F48642009495B4 /* ITalkerUdpNetworkEngine.m */; };
-		BDD6E5BF16095CD900699E5A /* ITalkerUserObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD6E5BE16095CD900699E5A /* ITalkerUserObserver.m */; };
+		BDBF21C7161302A800DE697F /* ITalkerBaseChatContent.m in Sources */ = {isa = PBXBuildFile; fileRef = BDBF21BD161302A800DE697F /* ITalkerBaseChatContent.m */; };
+		BDBF21C8161302A800DE697F /* ITalkerChatEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = BDBF21BF161302A800DE697F /* ITalkerChatEngine.m */; };
+		BDBF21C9161302A800DE697F /* ITalkerUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDBF21C2161302A800DE697F /* ITalkerUserInfo.m */; };
+		BDBF21CA161302A800DE697F /* ITalkerUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDBF21C4161302A800DE697F /* ITalkerUserManager.m */; };
+		BDBF21CB161302A800DE697F /* ITalkerUserObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = BDBF21C6161302A800DE697F /* ITalkerUserObserver.m */; };
 		BDD6E5C61609932300699E5A /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD6E5C21609932300699E5A /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BDD6E5C71609932300699E5A /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD6E5C51609932300699E5A /* Reachability.m */; };
 		BDD6E5CA1609962300699E5A /* ITalkerNetworkInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD6E5C91609962300699E5A /* ITalkerNetworkInfo.m */; };
 		BDD6E5D01609A7A500699E5A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDD6E5CF1609A7A500699E5A /* SystemConfiguration.framework */; };
-		BDD6E5DF1609C72200699E5A /* ITalkerUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD6E5DE1609C72200699E5A /* ITalkerUserInfo.m */; };
-		BDEAF80A160712280019C9B1 /* ITalkerChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDEAF808160712280019C9B1 /* ITalkerChatRoomViewController.m */; };
-		BDEAF80B160712280019C9B1 /* ITalkerChatRoomViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDEAF809160712280019C9B1 /* ITalkerChatRoomViewController.xib */; };
+		BDEAF80A160712280019C9B1 /* ITalkerChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDEAF808160712280019C9B1 /* ITalkerChatViewController.m */; };
+		BDEAF80B160712280019C9B1 /* ITalkerChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDEAF809160712280019C9B1 /* ITalkerChatViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BD097E1D160C0E0700C10882 /* ITalkerTcpNetworkEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerTcpNetworkEngine.h; path = Engine/Network/ITalkerTcpNetworkEngine.h; sourceTree = "<group>"; };
 		BD097E1E160C0E0700C10882 /* ITalkerTcpNetworkEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerTcpNetworkEngine.m; path = Engine/Network/ITalkerTcpNetworkEngine.m; sourceTree = "<group>"; };
-		BD097E22160C53E900C10882 /* ITalkerChatEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerChatEngine.m; path = Engine/mw/ITalkerChatEngine.m; sourceTree = "<group>"; };
-		BD097E24160C65E300C10882 /* ITalkerChatEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerChatEngine.h; path = Engine/mw/ITalkerChatEngine.h; sourceTree = "<group>"; };
-		BD4F4ABB160B1AE3001C0AFA /* ITalkerUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerUserManager.h; path = Engine/mw/ITalkerUserManager.h; sourceTree = "<group>"; };
-		BD4F4ABC160B1AE3001C0AFA /* ITalkerUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerUserManager.m; path = Engine/mw/ITalkerUserManager.m; sourceTree = "<group>"; };
 		BD5EA64715DD04BC00255E00 /* iTalker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTalker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD5EA64B15DD04BC00255E00 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BD5EA64D15DD04BC00255E00 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -61,6 +60,11 @@
 		BD6E735415EE1762003E8204 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		BD6E735615EE1790003E8204 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		BD9F47C015EF1242008FF75E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		BDAF9DA116143EF80018CF22 /* ITalkerTcpSocketItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerTcpSocketItem.h; path = Engine/Network/ITalkerTcpSocketItem.h; sourceTree = "<group>"; };
+		BDAF9DA216143EF80018CF22 /* ITalkerTcpSocketItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerTcpSocketItem.m; path = Engine/Network/ITalkerTcpSocketItem.m; sourceTree = "<group>"; };
+		BDAF9DA616144A890018CF22 /* ITalkerConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerConst.h; path = Engine/Util/ITalkerConst.h; sourceTree = "<group>"; };
+		BDAF9DA7161459200018CF22 /* ITalkerTextChatContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerTextChatContent.h; sourceTree = "<group>"; };
+		BDAF9DA8161459200018CF22 /* ITalkerTextChatContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerTextChatContent.m; sourceTree = "<group>"; };
 		BDB81887160AE52400CF2900 /* ITalkerFriendListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerFriendListViewController.h; sourceTree = "<group>"; };
 		BDB81888160AE52400CF2900 /* ITalkerFriendListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerFriendListViewController.m; sourceTree = "<group>"; };
 		BDB81889160AE52400CF2900 /* ITalkerFriendListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ITalkerFriendListViewController.xib; sourceTree = "<group>"; };
@@ -68,8 +72,16 @@
 		BDBC700115F4860B009495B4 /* ITalkerVoiceFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerVoiceFileManager.m; path = Engine/Voice/ITalkerVoiceFileManager.m; sourceTree = "<group>"; };
 		BDBC700415F48642009495B4 /* ITalkerUdpNetworkEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerUdpNetworkEngine.h; path = Engine/Network/ITalkerUdpNetworkEngine.h; sourceTree = "<group>"; };
 		BDBC700515F48642009495B4 /* ITalkerUdpNetworkEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerUdpNetworkEngine.m; path = Engine/Network/ITalkerUdpNetworkEngine.m; sourceTree = "<group>"; };
-		BDD6E5BD16095CD900699E5A /* ITalkerUserObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerUserObserver.h; path = Engine/mw/ITalkerUserObserver.h; sourceTree = "<group>"; };
-		BDD6E5BE16095CD900699E5A /* ITalkerUserObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerUserObserver.m; path = Engine/mw/ITalkerUserObserver.m; sourceTree = "<group>"; };
+		BDBF21BC161302A800DE697F /* ITalkerBaseChatContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerBaseChatContent.h; sourceTree = "<group>"; };
+		BDBF21BD161302A800DE697F /* ITalkerBaseChatContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerBaseChatContent.m; sourceTree = "<group>"; };
+		BDBF21BE161302A800DE697F /* ITalkerChatEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerChatEngine.h; sourceTree = "<group>"; };
+		BDBF21BF161302A800DE697F /* ITalkerChatEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerChatEngine.m; sourceTree = "<group>"; };
+		BDBF21C1161302A800DE697F /* ITalkerUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerUserInfo.h; sourceTree = "<group>"; };
+		BDBF21C2161302A800DE697F /* ITalkerUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerUserInfo.m; sourceTree = "<group>"; };
+		BDBF21C3161302A800DE697F /* ITalkerUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerUserManager.h; sourceTree = "<group>"; };
+		BDBF21C4161302A800DE697F /* ITalkerUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerUserManager.m; sourceTree = "<group>"; };
+		BDBF21C5161302A800DE697F /* ITalkerUserObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerUserObserver.h; sourceTree = "<group>"; };
+		BDBF21C6161302A800DE697F /* ITalkerUserObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerUserObserver.m; sourceTree = "<group>"; };
 		BDD6E5C11609932300699E5A /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		BDD6E5C21609932300699E5A /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		BDD6E5C41609932300699E5A /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -77,12 +89,9 @@
 		BDD6E5C81609962300699E5A /* ITalkerNetworkInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerNetworkInfo.h; path = Engine/Network/ITalkerNetworkInfo.h; sourceTree = "<group>"; };
 		BDD6E5C91609962300699E5A /* ITalkerNetworkInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerNetworkInfo.m; path = Engine/Network/ITalkerNetworkInfo.m; sourceTree = "<group>"; };
 		BDD6E5CF1609A7A500699E5A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		BDD6E5DD1609C72200699E5A /* ITalkerUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ITalkerUserInfo.h; path = Engine/mw/ITalkerUserInfo.h; sourceTree = "<group>"; };
-		BDD6E5DE1609C72200699E5A /* ITalkerUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ITalkerUserInfo.m; path = Engine/mw/ITalkerUserInfo.m; sourceTree = "<group>"; };
-		BDD6E5E01609C84E00699E5A /* ITalkerMwConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITalkerMwConst.h; sourceTree = "<group>"; };
-		BDEAF807160712280019C9B1 /* ITalkerChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerChatRoomViewController.h; sourceTree = "<group>"; };
-		BDEAF808160712280019C9B1 /* ITalkerChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerChatRoomViewController.m; sourceTree = "<group>"; };
-		BDEAF809160712280019C9B1 /* ITalkerChatRoomViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ITalkerChatRoomViewController.xib; sourceTree = "<group>"; };
+		BDEAF807160712280019C9B1 /* ITalkerChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITalkerChatViewController.h; sourceTree = "<group>"; };
+		BDEAF808160712280019C9B1 /* ITalkerChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITalkerChatViewController.m; sourceTree = "<group>"; };
+		BDEAF809160712280019C9B1 /* ITalkerChatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ITalkerChatViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +169,7 @@
 		BD5EBF5415EF7356007E6B87 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				BDAF9DA616144A890018CF22 /* ITalkerConst.h */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -205,6 +215,8 @@
 				BDBC700515F48642009495B4 /* ITalkerUdpNetworkEngine.m */,
 				BD097E1D160C0E0700C10882 /* ITalkerTcpNetworkEngine.h */,
 				BD097E1E160C0E0700C10882 /* ITalkerTcpNetworkEngine.m */,
+				BDAF9DA116143EF80018CF22 /* ITalkerTcpSocketItem.h */,
+				BDAF9DA216143EF80018CF22 /* ITalkerTcpSocketItem.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -212,7 +224,7 @@
 		BD6E735015EE1293003E8204 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				BDD6E5BB16095AEE00699E5A /* mw */,
+				BDBF21BB161302A800DE697F /* Business */,
 				BD5EBF5415EF7356007E6B87 /* Util */,
 				BD6E734F15EE128C003E8204 /* Network */,
 				BD6E734E15EE1283003E8204 /* Voice */,
@@ -220,20 +232,24 @@
 			name = Engine;
 			sourceTree = "<group>";
 		};
-		BDD6E5BB16095AEE00699E5A /* mw */ = {
+		BDBF21BB161302A800DE697F /* Business */ = {
 			isa = PBXGroup;
 			children = (
-				BDD6E5BD16095CD900699E5A /* ITalkerUserObserver.h */,
-				BDD6E5BE16095CD900699E5A /* ITalkerUserObserver.m */,
-				BDD6E5DD1609C72200699E5A /* ITalkerUserInfo.h */,
-				BDD6E5DE1609C72200699E5A /* ITalkerUserInfo.m */,
-				BDD6E5E01609C84E00699E5A /* ITalkerMwConst.h */,
-				BD4F4ABB160B1AE3001C0AFA /* ITalkerUserManager.h */,
-				BD4F4ABC160B1AE3001C0AFA /* ITalkerUserManager.m */,
-				BD097E24160C65E300C10882 /* ITalkerChatEngine.h */,
-				BD097E22160C53E900C10882 /* ITalkerChatEngine.m */,
+				BDBF21BC161302A800DE697F /* ITalkerBaseChatContent.h */,
+				BDBF21BD161302A800DE697F /* ITalkerBaseChatContent.m */,
+				BDBF21BE161302A800DE697F /* ITalkerChatEngine.h */,
+				BDBF21BF161302A800DE697F /* ITalkerChatEngine.m */,
+				BDBF21C1161302A800DE697F /* ITalkerUserInfo.h */,
+				BDBF21C2161302A800DE697F /* ITalkerUserInfo.m */,
+				BDBF21C3161302A800DE697F /* ITalkerUserManager.h */,
+				BDBF21C4161302A800DE697F /* ITalkerUserManager.m */,
+				BDBF21C5161302A800DE697F /* ITalkerUserObserver.h */,
+				BDBF21C6161302A800DE697F /* ITalkerUserObserver.m */,
+				BDAF9DA7161459200018CF22 /* ITalkerTextChatContent.h */,
+				BDAF9DA8161459200018CF22 /* ITalkerTextChatContent.m */,
 			);
-			name = mw;
+			name = Business;
+			path = Engine/Business;
 			sourceTree = "<group>";
 		};
 		BDD6E5C01609932300699E5A /* JSONKit */ = {
@@ -257,9 +273,9 @@
 		BDEAF805160711C80019C9B1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				BDEAF807160712280019C9B1 /* ITalkerChatRoomViewController.h */,
-				BDEAF808160712280019C9B1 /* ITalkerChatRoomViewController.m */,
-				BDEAF809160712280019C9B1 /* ITalkerChatRoomViewController.xib */,
+				BDEAF807160712280019C9B1 /* ITalkerChatViewController.h */,
+				BDEAF808160712280019C9B1 /* ITalkerChatViewController.m */,
+				BDEAF809160712280019C9B1 /* ITalkerChatViewController.xib */,
 				BDB81887160AE52400CF2900 /* ITalkerFriendListViewController.h */,
 				BDB81888160AE52400CF2900 /* ITalkerFriendListViewController.m */,
 				BDB81889160AE52400CF2900 /* ITalkerFriendListViewController.xib */,
@@ -320,7 +336,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD5EA65615DD04BC00255E00 /* InfoPlist.strings in Resources */,
-				BDEAF80B160712280019C9B1 /* ITalkerChatRoomViewController.xib in Resources */,
+				BDEAF80B160712280019C9B1 /* ITalkerChatViewController.xib in Resources */,
 				BDB8188B160AE52400CF2900 /* ITalkerFriendListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,16 +355,19 @@
 				BD6E735315EE1303003E8204 /* ITalkerVoiceEngine.m in Sources */,
 				BDBC700215F4860B009495B4 /* ITalkerVoiceFileManager.m in Sources */,
 				BDBC700615F48642009495B4 /* ITalkerUdpNetworkEngine.m in Sources */,
-				BDEAF80A160712280019C9B1 /* ITalkerChatRoomViewController.m in Sources */,
-				BDD6E5BF16095CD900699E5A /* ITalkerUserObserver.m in Sources */,
+				BDEAF80A160712280019C9B1 /* ITalkerChatViewController.m in Sources */,
 				BDD6E5C61609932300699E5A /* JSONKit.m in Sources */,
 				BDD6E5C71609932300699E5A /* Reachability.m in Sources */,
 				BDD6E5CA1609962300699E5A /* ITalkerNetworkInfo.m in Sources */,
-				BDD6E5DF1609C72200699E5A /* ITalkerUserInfo.m in Sources */,
 				BDB8188A160AE52400CF2900 /* ITalkerFriendListViewController.m in Sources */,
-				BD4F4ABD160B1AE3001C0AFA /* ITalkerUserManager.m in Sources */,
 				BD097E1F160C0E0700C10882 /* ITalkerTcpNetworkEngine.m in Sources */,
-				BD097E23160C53E900C10882 /* ITalkerChatEngine.m in Sources */,
+				BDBF21C7161302A800DE697F /* ITalkerBaseChatContent.m in Sources */,
+				BDBF21C8161302A800DE697F /* ITalkerChatEngine.m in Sources */,
+				BDBF21C9161302A800DE697F /* ITalkerUserInfo.m in Sources */,
+				BDBF21CA161302A800DE697F /* ITalkerUserManager.m in Sources */,
+				BDBF21CB161302A800DE697F /* ITalkerUserObserver.m in Sources */,
+				BDAF9DA316143EF80018CF22 /* ITalkerTcpSocketItem.m in Sources */,
+				BDAF9DA9161459200018CF22 /* ITalkerTextChatContent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

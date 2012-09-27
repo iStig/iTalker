@@ -6,8 +6,12 @@
 //  Copyright (c) 2012年 cmcc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "ITalkerBaseChatContent.h"
 
-@interface ITalkerTextChatContent : NSObject
+@interface ITalkerTextChatContent : ITalkerBaseChatContent
+
+- (id)initWIthData:(NSData *)data;
+
+@property (readonly, nonatomic) NSString * textContent;
 
 @end

@@ -9,6 +9,7 @@
 #import "ITalkerFriendListViewController.h"
 #import "ITalkerUserObserver.h"
 #import "ITalkerUserInfo.h"
+#import "ITalkerChatViewController.h"
 
 @interface ITalkerFriendListViewController ()
 
@@ -55,8 +56,7 @@
     
     switch (event) {
         case ITalkerUserObserverUserAdded: {
-            NSString * user = [NSString stringWithFormat:@"%@ : %@", userInfo.userName, userInfo.IpAddr];
-            [_friendArray addObject:user];
+            [_friendArray addObject:userInfo];
             
             NSArray * array = [NSArray arrayWithObjects:[NSIndexPath indexPathForRow:(_friendArray.count - 1) inSection:0], nil];
             
@@ -86,10 +86,18 @@
     }
 
     if (indexPath && indexPath.section == 0 && indexPath.row < _friendArray.count) {
-        cell.textLabel.text = [_friendArray objectAtIndex:indexPath.row];
+        ITalkerUserInfo * userInfo = [_friendArray objectAtIndex:indexPath.row];
+        cell.textLabel.text = userInfo.IpAddr;
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ITalkerChatViewController * chatViewController = [[ITalkerChatViewController alloc] initWithNibName:@"ITalkerChatRoomViewController" bundle:nil];
+    chatViewController.chatToUserInfo = [_friendArray objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
 @end

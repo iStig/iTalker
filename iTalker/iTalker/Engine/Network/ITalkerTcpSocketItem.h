@@ -8,6 +8,22 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ITalkerTcpNetworkItem : NSObject
+#import "AsyncSocket.h"
+
+typedef NSInteger ITalkerTcpSocketId;
+
+#define kITalkerInvalidSocketId     -1
+
+@interface ITalkerTcpSocketItem : NSObject
+
+- (id)initWithSocket:(AsyncSocket *)socket AndId:(ITalkerTcpSocketId)socketId;
+
+- (BOOL)isEqualById:(ITalkerTcpSocketId)socketId;
+
+- (BOOL)isEqualBySocket:(AsyncSocket *)socket;
+
+@property (readonly, nonatomic) ITalkerTcpSocketId socketId;
+
+@property (readonly, nonatomic) AsyncSocket * socket;
 
 @end
