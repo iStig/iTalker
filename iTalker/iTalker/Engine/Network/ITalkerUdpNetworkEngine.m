@@ -24,6 +24,8 @@
     if (self) {
         _udpSocket = [[AsyncUdpSocket alloc] initIPv4];
         [_udpSocket setDelegate:self];
+        
+        _currentPort = 0;
     }
     
     return self;

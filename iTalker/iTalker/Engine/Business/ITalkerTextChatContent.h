@@ -10,8 +10,10 @@
 
 @interface ITalkerTextChatContent : ITalkerBaseChatContent
 
-- (id)initWIthData:(NSData *)data;
+- (id)initWithData:(NSData *)data;
 
-@property (readonly, nonatomic) NSString * textContent;
+- (id)initWithString:(NSString *)str;
+
+@property (readonly, nonatomic) NSString * text;
 
 @end

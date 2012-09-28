@@ -22,8 +22,8 @@
 
 @interface ITalkerChatEngine : NSObject <ITalkerTcpNetworkDelegate> {
     ITalkerTcpNetworkEngine * _networkEngine;
-    ITalkerTcpSocketId currentSocketId;
-    ITalkerUserInfo * currentUserInfo;
+    ITalkerTcpSocketId _currentSocketId;
+    ITalkerUserInfo * _currentUserInfo;
 }
 
 + (ITalkerChatEngine *)getInstance;
@@ -31,6 +31,8 @@
 - (void)startChatWith:(ITalkerUserInfo *)userInfo;
 
 - (void)stopChatWith:(ITalkerUserInfo *)userInfo;
+
+- (void)talk:(ITalkerBaseChatContent *)message;
 
 @property (assign, nonatomic) id<ITalkerChatDelegate> chatDelegate;
 

@@ -18,6 +18,10 @@ typedef enum {
 
 - (id)initWithType:(ITalkerChatContentType)type;
 
+- (NSData *)serialize;
+
+- (BOOL)deserialize:(NSData *)data;
+
 @property (readonly, nonatomic) ITalkerChatContentType contentType;
 
 @end

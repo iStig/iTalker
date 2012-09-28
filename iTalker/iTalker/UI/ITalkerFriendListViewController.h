@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #import "ITalkerUserObserver.h"
+#import "ITalkerChatEngine.h"
 
-@interface ITalkerFriendListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ITalkerUserEventDelegate> {
+@interface ITalkerFriendListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ITalkerUserEventDelegate, ITalkerChatDelegate> {
     NSMutableArray * _friendArray;
 }
 

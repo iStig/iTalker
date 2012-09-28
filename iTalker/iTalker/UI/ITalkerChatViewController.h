@@ -23,6 +23,6 @@
 
 - (IBAction)handleSendButtonClicked:(id)sender;
 
-- (IBAction)handleSpeechButtonClicked:(id)sender;
+- (IBAction)handleSpeechButtonHold:(id)sender;
 
 @end

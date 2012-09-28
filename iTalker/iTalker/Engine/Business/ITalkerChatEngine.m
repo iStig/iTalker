@@ -39,6 +39,9 @@ static ITalkerChatEngine * instance;
     if (self) {
         _networkEngine = [[ITalkerTcpNetworkEngine alloc] init];
         [_networkEngine acceptPort:kChatAcceptPort];
+        _networkEngine.networkDelegate = self;
+        _currentSocketId = kITalkerInvalidSocketId;
+        _currentUserInfo = nil;
     }
     return self;
 }
@@ -47,38 +50,54 @@ static ITalkerChatEngine * instance;
 
 - (void)startChatWith:(ITalkerUserInfo *)userInfo
 {
-    currentSocketId = [_networkEngine connectHost:userInfo.IpAddr OnPort:kChatAcceptPort];
-    currentUserInfo = userInfo;
+    if (_currentSocketId == kITalkerInvalidSocketId) {
+        _currentSocketId = [_networkEngine connectHost:userInfo.IpAddr OnPort:kChatAcceptPort];
+        _currentUserInfo = userInfo;
+    }
 }
 
 - (void)stopChatWith:(ITalkerUserInfo *)userInfo
 {
-    [_networkEngine disconnectSocketById:currentSocketId];
-    currentUserInfo = nil;
+    if (_currentSocketId != kITalkerInvalidSocketId) {
+        [_networkEngine disconnectSocketById:_currentSocketId];
+        _currentUserInfo = nil;
+    }
+}
+
+- (void)talk:(ITalkerBaseChatContent *)message
+{
+    if (message == nil && _currentSocketId == kITalkerInvalidSocketId) {
+        return;
+    }
+    
+    NSData * data = [message serialize];
+    [self sendData:data];
 }
 
 - (void)sendData:(NSData *)data
 {
-    [_networkEngine sendData:data FromSocketById:currentSocketId];
+    if (_currentSocketId != kITalkerInvalidSocketId) {
+        [_networkEngine sendData:data FromSocketById:_currentSocketId];
+    }
 }
 
 #pragma mark - tcp network delegate methods
 
 - (void)handleTcpData:(NSData *)data FromSocketId:(ITalkerTcpSocketId)socketId
 {
-    if (socketId == currentSocketId) {
+    if (socketId == _currentSocketId) {
         //TODO check if accept new socket header data
         
         if (_chatDelegate && [_chatDelegate respondsToSelector:@selector(handleNewMessage:From:)]) {
-            ITalkerTextChatContent * chatContent = [[ITalkerTextChatContent alloc] init];
-            [_chatDelegate handleNewMessage:chatContent From:currentUserInfo];
+            ITalkerTextChatContent * chatContent = [[ITalkerTextChatContent alloc] initWithData:data];
+            [_chatDelegate handleNewMessage:chatContent From:_currentUserInfo];
         }
     }
 }
 
 - (void)handleAcceptNewSocket:(ITalkerTcpSocketId)newSocketId
 {
-    currentSocketId = newSocketId;
+    _currentSocketId = newSocketId;
 }
 
 - (void)handleTcpEvent:(ITalkerTcpNetworkEvent)event ForSocketId:(ITalkerTcpSocketId)socketId

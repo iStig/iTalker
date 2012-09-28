@@ -36,6 +36,8 @@
     [observer setUserEventDelegate:self];
     [observer startObserve];
     [observer publishUser];
+    
+    [[ITalkerChatEngine getInstance] setChatDelegate:self];
 }
 
 - (void)viewDidUnload
@@ -70,6 +72,13 @@
     }
 }
 
+- (void)handleNewMessage:(ITalkerBaseChatContent *)message From:(ITalkerUserInfo *)userInfo
+{
+    ITalkerChatViewController * chatViewController = [[ITalkerChatViewController alloc] initWithNibName:@"ITalkerChatViewController" bundle:nil];
+    chatViewController.chatToUserInfo = userInfo;
+    [self.navigationController pushViewController:chatViewController animated:YES];
+}
+
 #pragma mark - table view data source delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -95,9 +104,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ITalkerChatViewController * chatViewController = [[ITalkerChatViewController alloc] initWithNibName:@"ITalkerChatRoomViewController" bundle:nil];
-    chatViewController.chatToUserInfo = [_friendArray objectAtIndex:indexPath.row];
+    ITalkerChatViewController * chatViewController = [[ITalkerChatViewController alloc] initWithNibName:@"ITalkerChatViewController" bundle:nil];
+    ITalkerUserInfo * info = [_friendArray objectAtIndex:indexPath.row];
+    [[ITalkerChatEngine getInstance] startChatWith:info];
+    chatViewController.chatToUserInfo = info;
     [self.navigationController pushViewController:chatViewController animated:YES];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

@@ -20,4 +20,14 @@
     return self;
 }
 
+- (NSData *)serialize
+{
+    return nil;
+}
+
+- (BOOL)deserialize:(NSData *)data
+{
+    return NO;
+}
+
 @end

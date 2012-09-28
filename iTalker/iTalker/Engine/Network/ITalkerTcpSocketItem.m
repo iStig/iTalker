@@ -10,6 +10,16 @@
 
 @implementation ITalkerTcpSocketItem
 
+- (id)initWithSocket:(AsyncSocket *)socket AndId:(ITalkerTcpSocketId)socketId
+{
+    self = [super init];
+    if (self) {
+        _socket = socket;
+        _socketId = socketId;
+    }
+    return self;
+}
+
 - (BOOL)isEqualById:(ITalkerTcpSocketId)socketId;
 {
     if (_socketId == socketId) {

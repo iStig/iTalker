@@ -20,13 +20,33 @@
     return self;
 }
 
-- (id)initWIthData:(NSData *)data
+- (id)initWithData:(NSData *)data
 {
     self = [self init];
     if (self) {
-        _textContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [self deserialize:data];
     }
     return self;
+}
+
+- (id)initWithString:(NSString *)str
+{
+    self = [self init];
+    if (self) {
+        _text = str;
+    }
+    return self;
+}
+
+- (BOOL)deserialize:(NSData *)data
+{
+    _text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return YES;
+}
+
+- (NSData *)serialize
+{
+    return [_text dataUsingEncoding:NSUTF8StringEncoding];
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "ITalkerConst.h"
 
 #define kSendTcpTag             1
+#define kReceiveTcpTag          2
 
 static NSInteger staticIdCount = 0;
 
@@ -90,7 +91,7 @@ static NSInteger staticIdCount = 0;
     if (sock && [sock isEqual:_listenSocket]) {
         ITalkerTcpSocketItem * newItem = [[ITalkerTcpSocketItem alloc] initWithSocket:newSocket AndId:staticIdCount++];
         [_socketItemArray addObject:newItem];
-        
+        [newSocket readDataWithTimeout:-1 tag:kReceiveTcpTag];
         if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleAcceptNewSocket:)]) {
             [_networkDelegate handleAcceptNewSocket:newItem.socketId];
         }
@@ -102,6 +103,7 @@ static NSInteger staticIdCount = 0;
     if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleTcpEvent:ForSocketId:)]) {
         ITalkerTcpSocketItem * item = [self findSocketItemBySocket:sock];
         if (item) {
+            [item.socket readDataWithTimeout:-1 tag:kReceiveTcpTag];
             [_networkDelegate handleTcpEvent:ITalkerTcpNetworkEventConnected ForSocketId:item.socketId];
         }
     }
@@ -112,6 +114,7 @@ static NSInteger staticIdCount = 0;
     if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleTcpData:FromSocketId:)]) {
         ITalkerTcpSocketItem * item = [self findSocketItemBySocket:sock];
         if (item) {
+            [item.socket readDataWithTimeout:-1 tag:kReceiveTcpTag];
             [_networkDelegate handleTcpData:data FromSocketId:item.socketId];
         }
     }
@@ -119,7 +122,9 @@ static NSInteger staticIdCount = 0;
 
 - (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
-    
+    if (sock) {
+        [sock readDataWithTimeout:-1 tag:kReceiveTcpTag];
+    }
 }
 
 @end
