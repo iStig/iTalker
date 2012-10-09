@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class ITalkerUserManager;
+@class ITalkerAccountManager;
 
 @interface ITalkerAppDelegate : UIResponder <UIApplicationDelegate> {
-    ITalkerUserManager * _userManager;
+    ITalkerAccountManager * _userManager;
 }
 
 @property (strong, nonatomic) UIWindow *window;

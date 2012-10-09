@@ -23,7 +23,7 @@
 @interface ITalkerChatEngine : NSObject <ITalkerTcpNetworkDelegate> {
     ITalkerTcpNetworkEngine * _networkEngine;
     ITalkerTcpSocketId _currentSocketId;
-    ITalkerUserInfo * _currentUserInfo;
+    ITalkerUserInfo * _currentTalkToUserInfo;
 }
 
 + (ITalkerChatEngine *)getInstance;

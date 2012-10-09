@@ -11,7 +11,7 @@
 #import "ITalkerFriendListViewController.h"
 #import "ITalkerNetworkInfo.h"
 #import "ITalkerUserInfo.h"
-#import "ITalkerUserManager.h"
+#import "ITalkerAccountManager.h"
 #import "ITalkerChatEngine.h"
 
 @implementation ITalkerAppDelegate
@@ -19,7 +19,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //TODO do these after login
-    _userManager = [[ITalkerUserManager alloc] init];
+    _userManager = [[ITalkerAccountManager alloc] init];
     [ITalkerChatEngine getInstance];
     ITalkerUserInfo * userInfo = [[ITalkerUserInfo alloc] init];
     userInfo.userId = @"12345";

@@ -10,4 +10,33 @@
 
 @implementation ITalkerVoiceChatContent
 
+- (id)initWithVoiceData:(NSData *)data
+{
+    self = [super initWithType:ITalkerChatContentTypeVoice];
+    if (self) {
+        _voiceData = data;
+    }
+    return self;
+}
+
+- (id)initWIthVoiceFileName:(NSString *)filename
+{
+    self = [super initWithType:ITalkerChatContentTypeVoice];
+    if (self) {
+        _voiceData = [NSData dataWithContentsOfFile:filename];
+    }
+    return self;
+}
+
+- (NSData *)serialize
+{
+    return [NSData dataWithData:_voiceData];
+}
+
+- (BOOL)deserialize:(NSData *)data
+{
+    _voiceData = [NSData dataWithData:data];
+    return YES;
+}
+
 @end

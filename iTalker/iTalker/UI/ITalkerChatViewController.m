@@ -10,6 +10,11 @@
 #import "ITalkerUdpNetworkEngine.h"
 #import "ITalkerUserInfo.h"
 #import "ITalkerTextChatContent.h"
+#import "ITalkerVoiceEngine.h"
+#import "ITalkerVoiceChatContent.h"
+#import "ITalkerVoiceFileManager.h"
+
+#define kITalkerChatViewInputFieldTag           1
 
 @implementation ITalkerChatViewController
 
@@ -17,7 +22,12 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        _chatContentArray = [[NSMutableArray alloc] init];
 
+        [[ITalkerChatEngine getInstance] setChatDelegate:self];
+        
+        _gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        [_gestureRec setDelegate:self];
     }
     return self;
 }
@@ -27,10 +37,9 @@
     [super viewDidLoad];
     [_chatTableView setDelegate:self];
     [_chatTableView setDataSource:self];
-    
-    _chatContentArray = [[NSMutableArray alloc] init];
-    
-    [[ITalkerChatEngine getInstance] setChatDelegate:self];
+    [_chatTableView addGestureRecognizer:_gestureRec];
+    [_chatInputField setTag:kITalkerChatViewInputFieldTag];
+    [_chatInputField setDelegate:self];
 }
 
 - (void)viewDidUnload
@@ -45,12 +54,20 @@
 
 - (IBAction)handleSpeechButtonHold:(id)sender
 {
+    [[ITalkerVoiceEngine getInstance] recordVoice];
+}
 
+- (IBAction)handleSpeechButtonReleased:(id)sender
+{
+    ITalkerVoiceRecordId recordId = [[ITalkerVoiceEngine getInstance] stopRecordVoice];
+    NSString * filename = [[ITalkerVoiceFileManager getInstance] getFileNameById:recordId];
+    ITalkerVoiceChatContent * content = [[ITalkerVoiceChatContent alloc] initWIthVoiceFileName:filename];
+    [[ITalkerChatEngine getInstance] talk:content];
 }
 
 - (IBAction)handleSendButtonClicked:(id)sender
 {
-    ITalkerTextChatContent * content = [[ITalkerTextChatContent alloc] initWithString:@"Test"];
+    ITalkerTextChatContent * content = [[ITalkerTextChatContent alloc] initWithString:_chatInputField.text];
     [[ITalkerChatEngine getInstance] talk:content];
 }
 
@@ -75,6 +92,11 @@
             cell.textLabel.text = textContent.text;
             break;
         }
+        case ITalkerChatContentTypeVoice:
+        {
+            cell.textLabel.text = @"Click to play!";
+            break;
+        }
         default:
             break;
     }
@@ -82,21 +104,83 @@
     return cell;
 }
 
-- (void)handleNewMessage:(ITalkerBaseChatContent *)message From:(ITalkerUserInfo *)userInfo
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    switch (message.contentType) {
-        case ITalkerChatContentTypeText:
+    ITalkerBaseChatContent * content = [_chatContentArray objectAtIndex:indexPath.row];
+    switch (content.contentType) {
+        case ITalkerChatContentTypeVoice:
         {
-            [_chatContentArray addObject:message];
-            NSArray * array = [NSArray arrayWithObjects:[NSIndexPath indexPathForRow:(_chatContentArray.count - 1) inSection:0], nil];
-            
-            [_chatTableView beginUpdates];
-            [_chatTableView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
-            [_chatTableView endUpdates];
+            ITalkerVoiceChatContent * voiceContent = (ITalkerVoiceChatContent *)content;
+            [[ITalkerVoiceEngine getInstance] playVoiceByData:voiceContent.voiceData];
+            break;
         }
         default:
             break;
     }
+}
+
+- (void)handleNewMessage:(ITalkerBaseChatContent *)message From:(ITalkerUserInfo *)userInfo
+{
+    [_chatContentArray addObject:message];
+    NSArray * array = [NSArray arrayWithObjects:[NSIndexPath indexPathForRow:(_chatContentArray.count - 1) inSection:0], nil];
+    
+    [_chatTableView beginUpdates];
+    [_chatTableView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
+    [_chatTableView endUpdates];
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField.tag == kITalkerChatViewInputFieldTag) {
+        [UIView animateWithDuration:0.3 animations:^{
+            CGRect newFrame = self.view.frame;
+            newFrame.size.height -= 170;
+            
+            self.view.frame = newFrame;
+            
+            newFrame = _chatInputField.frame;
+            newFrame.origin.y -= 170;
+            
+            _chatInputField.frame = newFrame;
+
+            newFrame = _sendButton.frame;
+            newFrame.origin.y -= 170;
+            
+            _sendButton.frame = newFrame;
+            
+        }];
+    }
+    return YES;
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    if (textField.tag == kITalkerChatViewInputFieldTag) {
+        [UIView animateWithDuration:0.3 animations:^{
+            CGRect newFrame = self.view.frame;
+            newFrame.size.height += 170;
+            
+            self.view.frame = newFrame;
+            
+            newFrame = _chatInputField.frame;
+            newFrame.origin.y += 170;
+            
+            _chatInputField.frame = newFrame;
+            
+            newFrame = _sendButton.frame;
+            newFrame.origin.y += 170;
+            
+            _sendButton.frame = newFrame;
+            
+        }];
+    }
+    return YES;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    [_chatInputField resignFirstResponder];
+    return NO;
 }
 
 @end

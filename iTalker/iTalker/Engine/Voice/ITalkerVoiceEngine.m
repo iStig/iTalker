@@ -51,7 +51,7 @@ static ITalkerVoiceEngine * instance = nil;
 
 }
 
-- (void)recordVoice:(NSString *)filename
+- (void)recordVoice
 {
     NSMutableDictionary *recordSettings =
     [[NSMutableDictionary alloc] initWithCapacity:10];
@@ -67,6 +67,9 @@ static ITalkerVoiceEngine * instance = nil;
         _recorder = nil;
     }
     
+    NSString * filename = nil;
+    _curRecordId = [[ITalkerVoiceFileManager getInstance] generateFile:&filename];
+    
     NSURL * url = [NSURL fileURLWithPath:filename];
     NSError * error = nil;
     
@@ -80,17 +83,22 @@ static ITalkerVoiceEngine * instance = nil;
     
     [_recorder prepareToRecord];
     [_recorder record];
+    return;
 }
 
-- (void)stopRecordVoice
+- (ITalkerVoiceRecordId)stopRecordVoice
 {
     [_recorder stop];
     _recorder = nil;
+    
+    ITalkerVoiceRecordId returnId = _curRecordId;
+    _curRecordId = kITalkerInvalidVoiceRecordId;
+    return returnId;
 }
 
-- (void)playVoice:(NSString *)filename
+- (void)playVoiceByFileId:(ITalkerVoiceRecordId)recordId
 {
-    NSURL * url = [NSURL fileURLWithPath:filename];
+    NSURL * url = [NSURL fileURLWithPath:[[ITalkerVoiceFileManager getInstance] getFileNameById:recordId]];
     NSError * error = nil;
     
     if (_player) {
@@ -107,6 +115,28 @@ static ITalkerVoiceEngine * instance = nil;
     
     [_player prepareToPlay];
     [_player play];
+
+}
+
+- (void)playVoiceByData:(NSData *)data
+{
+    NSError * error = nil;
+    
+    if (_player) {
+        _player = nil;
+    }
+    
+    [self initAudioSession];
+    
+    _player = [[AVAudioPlayer alloc] initWithData:data error:&error];
+    if (error) {
+        NSLog(@"playVoice error = %@", error.localizedDescription);
+        return;
+    }
+    
+    [_player prepareToPlay];
+    [_player play];
+
 }
 
 @end

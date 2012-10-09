@@ -7,7 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ITalkerBaseChatContent.h"
 
-@interface ITalkerVoiceChatContent : NSObject
+@interface ITalkerVoiceChatContent : ITalkerBaseChatContent
+
+- (id)initWithVoiceData:(NSData *)data;
+
+- (id)initWIthVoiceFileName:(NSString *)filename;
+
+@property (readonly, nonatomic) NSData * voiceData;
 
 @end

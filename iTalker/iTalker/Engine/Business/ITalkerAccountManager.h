@@ -10,7 +10,7 @@
 
 @class ITalkerUserInfo;
 
-@interface ITalkerUserManager : NSObject
+@interface ITalkerAccountManager : NSObject
 
 + (ITalkerUserInfo *)currentUser;
 

@@ -6,10 +6,10 @@
 //  Copyright (c) 2012年 cmcc. All rights reserved.
 //
 
-#import "ITalkerUserManager.h"
+#import "ITalkerAccountManager.h"
 #import "ITalkerUserInfo.h"
 
-@implementation ITalkerUserManager
+@implementation ITalkerAccountManager
 
 static ITalkerUserInfo * currentUserInfo = nil;
 

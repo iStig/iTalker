@@ -9,17 +9,22 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
+#import "ITalkerVoiceFileManager.h"
+
 @interface ITalkerVoiceEngine : NSObject {
     AVAudioRecorder * _recorder;
     AVAudioPlayer * _player;
+    ITalkerVoiceRecordId _curRecordId;
 }
 
 + (ITalkerVoiceEngine *)getInstance;
 
-- (void)recordVoice:(NSString *)filename;
+- (void)recordVoice;
 
-- (void)stopRecordVoice;
+- (ITalkerVoiceRecordId)stopRecordVoice;
 
-- (void)playVoice:(NSString *)filename;
+- (void)playVoiceByFileId:(ITalkerVoiceRecordId)voiceId;
+
+- (void)playVoiceByData:(NSData *)data;
 
 @end

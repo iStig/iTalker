@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ITalkerUtils : NSObject
+@interface ITalkerNetworkUtils : NSObject
+
++ (NSData *)generateNetworkDataByData:(NSData *)data;
+
++ (NSData *)generateNetworkDataByString:(NSString *)string;
+
++ (NSData *)generateNetworkDataByInt:(NSInteger)intValue;
 
 @end

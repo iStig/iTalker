@@ -8,6 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ITalkerVoiceFileManager : NSObject
+typedef NSInteger ITalkerVoiceRecordId;
+
+#define kITalkerInvalidVoiceRecordId            -1
+
+@interface ITalkerVoiceFileManager : NSObject {
+    ITalkerVoiceRecordId _nextId;
+}
+
++ (ITalkerVoiceFileManager *)getInstance;
+
+- (ITalkerVoiceRecordId)generateFile:(NSString **)filename;
+
+- (NSString *)getFileNameById:(ITalkerVoiceRecordId)recordId;
 
 @end

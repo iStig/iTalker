@@ -11,7 +11,7 @@
 #import "JSONKit.h"
 #import "ITalkerConst.h"
 #import "ITalkerUserInfo.h"
-#import "ITalkerUserManager.h"
+#import "ITalkerAccountManager.h"
 
 #define kPublishInfoKeyType                     @"type"
 #define kPublishInfoValueTypeAddUser            @"adduser"
@@ -60,7 +60,7 @@ static ITalkerUserObserver * instance = nil;
 
 - (void)publishUser
 {
-    ITalkerUserInfo * userInfo = [ITalkerUserManager currentUser];
+    ITalkerUserInfo * userInfo = [ITalkerAccountManager currentUser];
     if (userInfo == nil) {
         return;
     }
@@ -95,7 +95,7 @@ static ITalkerUserObserver * instance = nil;
                 ITalkerUserInfo * userInfo = [[ITalkerUserInfo alloc] init];
                 [userInfo deserialize:userInfoDic];
                 
-                ITalkerUserInfo * currentUserInfo = [ITalkerUserManager currentUser];
+                ITalkerUserInfo * currentUserInfo = [ITalkerAccountManager currentUser];
                 [_userEventDelegate handleUserObserverEvent:event AndUserInfo:userInfo];
                 
                 if ([type compare:kPublishInfoValueTypeAddUser options:NSCaseInsensitiveSearch] == NSOrderedSame) {

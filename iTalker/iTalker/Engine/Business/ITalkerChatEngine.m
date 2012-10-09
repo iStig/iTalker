@@ -10,6 +10,13 @@
 #import "ITalkerConst.h"
 #import "ITalkerUserInfo.h"
 #import "ITalkerTextChatContent.h"
+#import "ITalkerAccountManager.h"
+#import "JSONKit.h"
+#import "ITalkerVoiceChatContent.h"
+
+#define kTalkContentKeyUserInfo                     @"userinfo"
+#define kTalkContentKeyContentType                  @"contenttype"
+#define kTalkContentKeyContentData                  @"contentdata"
 
 @implementation ITalkerChatEngine
 
@@ -41,7 +48,7 @@ static ITalkerChatEngine * instance;
         [_networkEngine acceptPort:kChatAcceptPort];
         _networkEngine.networkDelegate = self;
         _currentSocketId = kITalkerInvalidSocketId;
-        _currentUserInfo = nil;
+        _currentTalkToUserInfo = nil;
     }
     return self;
 }
@@ -52,7 +59,7 @@ static ITalkerChatEngine * instance;
 {
     if (_currentSocketId == kITalkerInvalidSocketId) {
         _currentSocketId = [_networkEngine connectHost:userInfo.IpAddr OnPort:kChatAcceptPort];
-        _currentUserInfo = userInfo;
+        _currentTalkToUserInfo = userInfo;
     }
 }
 
@@ -60,7 +67,7 @@ static ITalkerChatEngine * instance;
 {
     if (_currentSocketId != kITalkerInvalidSocketId) {
         [_networkEngine disconnectSocketById:_currentSocketId];
-        _currentUserInfo = nil;
+        _currentTalkToUserInfo = nil;
     }
 }
 
@@ -70,8 +77,9 @@ static ITalkerChatEngine * instance;
         return;
     }
     
-    NSData * data = [message serialize];
-    [self sendData:data];
+    NSMutableDictionary * talkDic = [[NSMutableDictionary alloc] init];
+    
+    [self sendData:];
 }
 
 - (void)sendData:(NSData *)data
@@ -86,11 +94,30 @@ static ITalkerChatEngine * instance;
 - (void)handleTcpData:(NSData *)data FromSocketId:(ITalkerTcpSocketId)socketId
 {
     if (socketId == _currentSocketId) {
-        //TODO check if accept new socket header data
-        
         if (_chatDelegate && [_chatDelegate respondsToSelector:@selector(handleNewMessage:From:)]) {
-            ITalkerTextChatContent * chatContent = [[ITalkerTextChatContent alloc] initWithData:data];
-            [_chatDelegate handleNewMessage:chatContent From:_currentUserInfo];
+            JSONDecoder * jsonDecoder = [JSONDecoder decoder];
+            NSDictionary * talkDic = [jsonDecoder objectWithData:data];
+            
+            ITalkerUserInfo * userInfo = [talkDic objectForKey:kTalkContentKeyUserInfo];
+            NSData * contentData = [talkDic objectForKey:kTalkContentKeyContentData];
+            NSNumber * contentType = [talkDic objectForKey:kTalkContentKeyContentType];
+            
+            switch (contentType.integerValue) {
+                case ITalkerChatContentTypeText:
+                {
+                    ITalkerTextChatContent * chatContent = [[ITalkerTextChatContent alloc] initWithData:contentData];
+                    [_chatDelegate handleNewMessage:chatContent From:userInfo];
+                    break;
+                }
+                case ITalkerChatContentTypeVoice:
+                {
+                    ITalkerVoiceChatContent * chatContent = [[ITalkerVoiceChatContent alloc] initWithVoiceData:contentData];
+                    [_chatDelegate handleNewMessage:chatContent From:userInfo];
+                    break;
+                }
+                default:
+                    break;
+            }
         }
     }
 }

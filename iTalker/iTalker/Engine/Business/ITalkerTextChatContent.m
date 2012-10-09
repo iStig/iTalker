@@ -7,6 +7,7 @@
 //
 
 #import "ITalkerTextChatContent.h"
+#import "ITalkerNetworkUtils.h"
 
 @implementation ITalkerTextChatContent
 
@@ -46,6 +47,9 @@
 
 - (NSData *)serialize
 {
+    __autoreleasing NSMutableData * serializeData = [[NSMutableData alloc] init];
+    [ITalkerNetworkUtils generateNetworkDataByInt:self.contentType];
+    
     return [_text dataUsingEncoding:NSUTF8StringEncoding];
 }
 
