@@ -39,18 +39,23 @@
     return self;
 }
 
-- (BOOL)deserialize:(NSData *)data
+- (NSInteger)deserialize:(NSData *)data
 {
-    _text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    return YES;
+    NSInteger superLen = [super deserialize:data];
+    NSInteger length = 0;
+    
+    _text = [ITalkerNetworkUtils decodeStringByNetworkData:data From:superLen AndLength:&length];
+
+    return superLen + length;
 }
 
 - (NSData *)serialize
 {
     __autoreleasing NSMutableData * serializeData = [[NSMutableData alloc] init];
-    [ITalkerNetworkUtils generateNetworkDataByInt:self.contentType];
+    [serializeData appendData:[super serialize]];
+    [serializeData appendData:[ITalkerNetworkUtils encodeNetworkDataByString:_text]];
     
-    return [_text dataUsingEncoding:NSUTF8StringEncoding];
+    return serializeData;
 }
 
 @end

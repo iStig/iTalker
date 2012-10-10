@@ -26,4 +26,8 @@ typedef NSInteger ITalkerTcpSocketId;
 
 @property (readonly, nonatomic) AsyncSocket * socket;
 
+@property (strong, nonatomic) NSMutableData * data;
+
+@property (nonatomic) NSInteger totalLength;
+
 @end

@@ -20,7 +20,7 @@ typedef enum {
 
 - (NSData *)serialize;
 
-- (BOOL)deserialize:(NSData *)data;
+- (NSInteger)deserialize:(NSData *)data;
 
 @property (readonly, nonatomic) ITalkerChatContentType contentType;
 

@@ -10,10 +10,18 @@
 
 @interface ITalkerNetworkUtils : NSObject
 
-+ (NSData *)generateNetworkDataByData:(NSData *)data;
++ (NSData *)encodeNetworkDataByData:(NSData *)data;
 
-+ (NSData *)generateNetworkDataByString:(NSString *)string;
++ (NSData *)encodeNetworkDataByString:(NSString *)string;
 
-+ (NSData *)generateNetworkDataByInt:(NSInteger)intValue;
++ (NSData *)encodeNetworkDataByInt:(NSInteger)intValue;
+
++ (NSData *)decodeDataByNetworkData:(NSData *)data From:(NSInteger)pos AndLength:(NSInteger *)length;
+
++ (NSString *)decodeStringByNetworkData:(NSData *)data From:(NSInteger)pos AndLength:(NSInteger *)length;
+
++ (NSInteger)decodeIntByNetworkData:(NSData *)data From:(NSInteger)pos AndLength:(NSInteger *)length;
+
++ (NSInteger)decodeLengthByNetworkData:(NSData *)data From:(NSInteger)pos AndLength:(NSInteger *)length;
 
 @end

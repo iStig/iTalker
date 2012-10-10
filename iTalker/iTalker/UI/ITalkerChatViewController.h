@@ -13,7 +13,8 @@
 
 @interface ITalkerChatViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, ITalkerChatDelegate> {
     NSMutableArray * _chatContentArray;
-    UITapGestureRecognizer * _gestureRec;
+    UITapGestureRecognizer * _tapGestureRec;
+    UILongPressGestureRecognizer * _longPressGestureRec;
 }
 
 @property (strong, nonatomic) ITalkerUserInfo * chatToUserInfo;
@@ -24,10 +25,8 @@
 
 @property (strong, nonatomic) IBOutlet UIButton * sendButton;
 
+@property (strong, nonatomic) IBOutlet UIButton * speechButton;
+
 - (IBAction)handleSendButtonClicked:(id)sender;
-
-- (IBAction)handleSpeechButtonHold:(id)sender;
-
-- (IBAction)handleSpeechButtonReleased:(id)sender;
 
 @end

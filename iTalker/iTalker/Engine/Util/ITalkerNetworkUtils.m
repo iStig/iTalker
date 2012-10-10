@@ -10,7 +10,7 @@
 
 @implementation ITalkerNetworkUtils
 
-+ (NSData *)generateNetworkDataByData:(NSData *)data
++ (NSData *)encodeNetworkDataByData:(NSData *)data
 {
     if (data == nil) {
         return  nil;
@@ -25,33 +25,70 @@
     return retData;
 }
 
-+ (NSData *)generateNetworkDataByString:(NSString *)string
++ (NSData *)encodeNetworkDataByString:(NSString *)string
 {
-    if (string == nil) {
-        return  nil;
-    }
-    
-    __autoreleasing NSMutableData * retData = [[NSMutableData alloc] init];
     NSData * strData = [string dataUsingEncoding:NSUTF8StringEncoding];
-    NSInteger len = [strData length];
-    
-    [retData appendBytes:&len length:sizeof(NSInteger)];
-    [retData appendData:strData];
-    
-    return retData;
+    return [ITalkerNetworkUtils encodeNetworkDataByData:strData];
 }
 
-+ (NSData *)generateNetworkDataByInt:(NSInteger)intValue
++ (NSData *)encodeNetworkDataByInt:(NSInteger)intValue
 {
-    __autoreleasing NSMutableData * retData = [[NSMutableData alloc] init];
     NSString * string = [NSString stringWithFormat:@"%d", intValue];
-    NSData * strData = [string dataUsingEncoding:NSUTF8StringEncoding];
-    NSInteger len = [strData length];
+    return [ITalkerNetworkUtils encodeNetworkDataByString:string];
+}
+
++ (NSData *)decodeDataByNetworkData:(NSData *)data From:(NSInteger)pos AndLength:(NSInteger *)length
+{
+    NSInteger len = [self decodeLengthByNetworkData:data From:pos AndLength:nil];;
     
-    [retData appendBytes:&len length:sizeof(NSInteger)];
-    [retData appendData:strData];
+    if (len < 0 || [data length] < len + sizeof(NSInteger)) {
+        return nil;
+    }
     
-    return retData;
+    if (length != nil) {
+        *length = len + sizeof(NSInteger);
+    }
+    
+    NSRange range = NSMakeRange(pos + sizeof(NSInteger), len);
+    return [data subdataWithRange:range];
+}
+
++ (NSString *)decodeStringByNetworkData:(NSData *)data From:(NSInteger)pos AndLength:(NSInteger *)length
+{
+    NSData * strData = [ITalkerNetworkUtils decodeDataByNetworkData:data From:pos AndLength:length];
+    if (strData == nil) {
+        return nil;
+    }
+    
+    __autoreleasing NSString * str = [[NSString alloc] initWithData:strData encoding:NSUTF8StringEncoding];
+    return str;
+}
+
++ (NSInteger)decodeIntByNetworkData:(NSData *)data From:(NSInteger)pos AndLength:(NSInteger *)length
+{
+    NSString * str = [ITalkerNetworkUtils decodeStringByNetworkData:data From:pos AndLength:length];
+    if (str == nil) {
+        return -1;
+    }
+    
+    return [str integerValue];
+}
+
++ (NSInteger)decodeLengthByNetworkData:(NSData *)data From:(NSInteger)pos AndLength:(NSInteger *)length
+{
+    if (data.length < pos + sizeof(NSInteger)) {
+        return -1;
+    }
+    
+    if (length != nil) {
+        *length = sizeof(NSInteger);
+    }
+    
+    NSInteger len;
+    NSRange startRange = NSMakeRange(pos, sizeof(NSInteger));
+    [data getBytes:&len range:startRange];
+
+    return len;
 }
 
 @end

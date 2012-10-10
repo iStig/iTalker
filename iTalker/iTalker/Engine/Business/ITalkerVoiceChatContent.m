@@ -7,14 +7,15 @@
 //
 
 #import "ITalkerVoiceChatContent.h"
+#import "ITalkerNetworkUtils.h"
 
 @implementation ITalkerVoiceChatContent
 
-- (id)initWithVoiceData:(NSData *)data
+- (id)initWithData:(NSData *)data
 {
     self = [super initWithType:ITalkerChatContentTypeVoice];
     if (self) {
-        _voiceData = data;
+        [self deserialize:data];
     }
     return self;
 }
@@ -30,13 +31,21 @@
 
 - (NSData *)serialize
 {
-    return [NSData dataWithData:_voiceData];
+    __autoreleasing NSMutableData * serializeData = [[NSMutableData alloc] init];
+    [serializeData appendData:[super serialize]];
+    [serializeData appendData:[ITalkerNetworkUtils encodeNetworkDataByData:_voiceData]];
+    
+    return serializeData;
 }
 
-- (BOOL)deserialize:(NSData *)data
+- (NSInteger)deserialize:(NSData *)data
 {
-    _voiceData = [NSData dataWithData:data];
-    return YES;
+    NSInteger superLen = [super deserialize:data];
+    NSInteger length = 0;
+    
+    _voiceData = [ITalkerNetworkUtils decodeDataByNetworkData:data From:superLen AndLength:&length];
+    
+    return superLen + length;
 }
 
 @end

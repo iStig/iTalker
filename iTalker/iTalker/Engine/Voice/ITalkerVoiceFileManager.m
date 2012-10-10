@@ -45,10 +45,10 @@ static ITalkerVoiceFileManager * instance;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    NSString * newFilename = [NSString stringWithFormat:@"VoiceFile_%d", _nextId];
+    NSString * newFilename = [NSString stringWithFormat:@"VoiceFile_%d.caf", _nextId];
     *filename = [documentsDirectory stringByAppendingPathComponent:newFilename];
     
-    return ++_nextId;
+    return _nextId++;
 }
 
 - (NSString *)getFileNameById:(ITalkerVoiceRecordId)recordId
@@ -56,7 +56,7 @@ static ITalkerVoiceFileManager * instance;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 
-    NSString * newFilename = [NSString stringWithFormat:@"VoiceFile_%d", recordId];
+    NSString * newFilename = [NSString stringWithFormat:@"VoiceFile_%d.caf", recordId];
     return [documentsDirectory stringByAppendingPathComponent:newFilename];
 }
 

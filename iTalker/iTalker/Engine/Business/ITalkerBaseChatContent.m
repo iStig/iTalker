@@ -7,6 +7,7 @@
 //
 
 #import "ITalkerBaseChatContent.h"
+#import "ITalkerNetworkUtils.h"
 
 @implementation ITalkerBaseChatContent
 
@@ -22,12 +23,14 @@
 
 - (NSData *)serialize
 {
-    return nil;
+    return [ITalkerNetworkUtils encodeNetworkDataByInt:_contentType];
 }
 
-- (BOOL)deserialize:(NSData *)data
+- (NSInteger)deserialize:(NSData *)data
 {
-    return NO;
+    NSInteger len;
+    _contentType = [ITalkerNetworkUtils decodeIntByNetworkData:data From:0 AndLength:&len];
+    return len;
 }
 
 @end

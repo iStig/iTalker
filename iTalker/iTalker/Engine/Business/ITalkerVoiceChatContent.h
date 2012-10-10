@@ -11,7 +11,7 @@
 
 @interface ITalkerVoiceChatContent : ITalkerBaseChatContent
 
-- (id)initWithVoiceData:(NSData *)data;
+- (id)initWithData:(NSData *)data;
 
 - (id)initWIthVoiceFileName:(NSString *)filename;
 

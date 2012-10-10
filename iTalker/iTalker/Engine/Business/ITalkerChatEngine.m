@@ -13,6 +13,7 @@
 #import "ITalkerAccountManager.h"
 #import "JSONKit.h"
 #import "ITalkerVoiceChatContent.h"
+#import "ITalkerNetworkUtils.h"
 
 #define kTalkContentKeyUserInfo                     @"userinfo"
 #define kTalkContentKeyContentType                  @"contenttype"
@@ -76,10 +77,11 @@ static ITalkerChatEngine * instance;
     if (message == nil && _currentSocketId == kITalkerInvalidSocketId) {
         return;
     }
+    NSMutableData * data = [[NSMutableData alloc] init];
+    [data appendData:[ITalkerNetworkUtils encodeNetworkDataByData:[[_currentTalkToUserInfo serialize] JSONData]]];
+    [data appendData:[message serialize]];
     
-    NSMutableDictionary * talkDic = [[NSMutableDictionary alloc] init];
-    
-    [self sendData:];
+    [self sendData:data];
 }
 
 - (void)sendData:(NSData *)data
@@ -95,24 +97,32 @@ static ITalkerChatEngine * instance;
 {
     if (socketId == _currentSocketId) {
         if (_chatDelegate && [_chatDelegate respondsToSelector:@selector(handleNewMessage:From:)]) {
-            JSONDecoder * jsonDecoder = [JSONDecoder decoder];
-            NSDictionary * talkDic = [jsonDecoder objectWithData:data];
+            NSInteger length = 0;
+            NSData * userInfoData = [ITalkerNetworkUtils decodeDataByNetworkData:data From:0 AndLength:&length];
             
-            ITalkerUserInfo * userInfo = [talkDic objectForKey:kTalkContentKeyUserInfo];
-            NSData * contentData = [talkDic objectForKey:kTalkContentKeyContentData];
-            NSNumber * contentType = [talkDic objectForKey:kTalkContentKeyContentType];
+            NSData * chatData = [data subdataWithRange:NSMakeRange(length, [data length] - length)];
+            NSDictionary * userInfoDic = [[JSONDecoder decoder] objectWithData:userInfoData];
             
-            switch (contentType.integerValue) {
+            if (_currentTalkToUserInfo != nil) {
+                _currentTalkToUserInfo = nil;
+            }
+            _currentTalkToUserInfo = [[ITalkerUserInfo alloc] init];
+            [_currentTalkToUserInfo deserialize:userInfoDic];
+            
+            ITalkerBaseChatContent * content = [[ITalkerBaseChatContent alloc] init];
+            [content deserialize:chatData];
+            
+            switch (content.contentType) {
                 case ITalkerChatContentTypeText:
                 {
-                    ITalkerTextChatContent * chatContent = [[ITalkerTextChatContent alloc] initWithData:contentData];
-                    [_chatDelegate handleNewMessage:chatContent From:userInfo];
+                    ITalkerTextChatContent * chatContent = [[ITalkerTextChatContent alloc] initWithData:chatData];
+                    [_chatDelegate handleNewMessage:chatContent From:_currentTalkToUserInfo];
                     break;
                 }
                 case ITalkerChatContentTypeVoice:
                 {
-                    ITalkerVoiceChatContent * chatContent = [[ITalkerVoiceChatContent alloc] initWithVoiceData:contentData];
-                    [_chatDelegate handleNewMessage:chatContent From:userInfo];
+                    ITalkerVoiceChatContent * chatContent = [[ITalkerVoiceChatContent alloc] initWithData:chatData];
+                    [_chatDelegate handleNewMessage:chatContent From:_currentTalkToUserInfo];
                     break;
                 }
                 default:

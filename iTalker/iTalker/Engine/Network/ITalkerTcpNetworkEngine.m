@@ -8,6 +8,7 @@
 
 #import "ITalkerTcpNetworkEngine.h"
 #import "ITalkerConst.h"
+#import "ITalkerNetworkUtils.h"
 
 #define kSendTcpTag             1
 #define kReceiveTcpTag          2
@@ -47,7 +48,8 @@ static NSInteger staticIdCount = 0;
 {
     ITalkerTcpSocketItem * item = [self findSocketItemById:socketId];
     if (item) {
-        [item.socket writeData:data withTimeout:kNetworkTimeOut tag:kSendTcpTag];
+        NSData * networkData = [ITalkerNetworkUtils encodeNetworkDataByData:data];
+        [item.socket writeData:networkData withTimeout:kNetworkTimeOut tag:kSendTcpTag];
     }
 }
 
@@ -113,9 +115,25 @@ static NSInteger staticIdCount = 0;
 {
     if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleTcpData:FromSocketId:)]) {
         ITalkerTcpSocketItem * item = [self findSocketItemBySocket:sock];
-        if (item) {
+        if (item) {            
+            if (item.data == nil) {
+                // Receive the first TCP package
+                NSInteger bytesOfHeader = 0;
+                NSInteger total = [ITalkerNetworkUtils decodeLengthByNetworkData:data From:0 AndLength:&bytesOfHeader];
+                
+                item.totalLength = total;
+                item.data = [NSMutableData dataWithData:[data subdataWithRange:NSMakeRange(bytesOfHeader, [data length] - bytesOfHeader)]];
+            } else {
+                // Receive other TCP packages
+                [item.data appendData:data];
+            }
+            
+            if (item.data.length == item.totalLength) {
+                [_networkDelegate handleTcpData:item.data FromSocketId:item.socketId];
+                item.data = nil;
+                item.totalLength = 0;
+            }
             [item.socket readDataWithTimeout:-1 tag:kReceiveTcpTag];
-            [_networkDelegate handleTcpData:data FromSocketId:item.socketId];
         }
     }
 }

@@ -26,8 +26,10 @@
 
         [[ITalkerChatEngine getInstance] setChatDelegate:self];
         
-        _gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-        [_gestureRec setDelegate:self];
+        _tapGestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+        [_tapGestureRec setDelegate:self];
+        
+        _longPressGestureRec = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     }
     return self;
 }
@@ -37,7 +39,9 @@
     [super viewDidLoad];
     [_chatTableView setDelegate:self];
     [_chatTableView setDataSource:self];
-    [_chatTableView addGestureRecognizer:_gestureRec];
+    [_chatTableView addGestureRecognizer:_tapGestureRec];
+    [_speechButton addGestureRecognizer:_longPressGestureRec];
+    
     [_chatInputField setTag:kITalkerChatViewInputFieldTag];
     [_chatInputField setDelegate:self];
 }
@@ -52,17 +56,27 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (IBAction)handleSpeechButtonHold:(id)sender
+-(void)handleLongPressGesture:(UIGestureRecognizer*)gestureRecognizer
 {
-    [[ITalkerVoiceEngine getInstance] recordVoice];
-}
-
-- (IBAction)handleSpeechButtonReleased:(id)sender
-{
-    ITalkerVoiceRecordId recordId = [[ITalkerVoiceEngine getInstance] stopRecordVoice];
-    NSString * filename = [[ITalkerVoiceFileManager getInstance] getFileNameById:recordId];
-    ITalkerVoiceChatContent * content = [[ITalkerVoiceChatContent alloc] initWIthVoiceFileName:filename];
-    [[ITalkerChatEngine getInstance] talk:content];
+    if (gestureRecognizer == _longPressGestureRec) {
+        switch (gestureRecognizer.state) {
+            case UIGestureRecognizerStateBegan:
+            {
+                [[ITalkerVoiceEngine getInstance] recordVoice];
+                break;
+            }
+            case UIGestureRecognizerStateEnded:
+            {
+                ITalkerVoiceRecordId recordId = [[ITalkerVoiceEngine getInstance] stopRecordVoice];
+                NSString * filename = [[ITalkerVoiceFileManager getInstance] getFileNameById:recordId];
+                ITalkerVoiceChatContent * content = [[ITalkerVoiceChatContent alloc] initWIthVoiceFileName:filename];
+                [[ITalkerChatEngine getInstance] talk:content];
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 - (IBAction)handleSendButtonClicked:(id)sender
