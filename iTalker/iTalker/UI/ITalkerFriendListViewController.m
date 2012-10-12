@@ -10,6 +10,7 @@
 #import "ITalkerUserObserver.h"
 #import "ITalkerUserInfo.h"
 #import "ITalkerChatViewController.h"
+#import "ITalkerTalkbackViewController.h"
 
 @interface ITalkerFriendListViewController ()
 
@@ -74,9 +75,17 @@
 
 - (void)handleNewMessage:(ITalkerBaseChatContent *)message From:(ITalkerUserInfo *)userInfo
 {
-    ITalkerChatViewController * chatViewController = [[ITalkerChatViewController alloc] initWithNibName:@"ITalkerChatViewController" bundle:nil];
-    chatViewController.chatToUserInfo = userInfo;
-    [self.navigationController pushViewController:chatViewController animated:YES];
+    if (message.contentType == ITalkerChatContentTypeTalkback) {
+        ITalkerTalkbackViewController * talkbackViewController = [[ITalkerTalkbackViewController alloc] initWithNibName:@"ITalkerTalkbackViewController" bundle:nil];
+        talkbackViewController.chatToUserInfo = userInfo;
+        [talkbackViewController addChatContent:message];
+        [self.navigationController pushViewController:talkbackViewController animated:YES];
+    } else {
+        ITalkerChatViewController * chatViewController = [[ITalkerChatViewController alloc] initWithNibName:@"ITalkerChatViewController" bundle:nil];
+        chatViewController.chatToUserInfo = userInfo;
+        [chatViewController addChatContent:message];
+        [self.navigationController pushViewController:chatViewController animated:YES];
+    }
 }
 
 #pragma mark - table view data source delegate
@@ -97,6 +106,12 @@
     if (indexPath && indexPath.section == 0 && indexPath.row < _friendArray.count) {
         ITalkerUserInfo * userInfo = [_friendArray objectAtIndex:indexPath.row];
         cell.textLabel.text = userInfo.IpAddr;
+        
+        UIButton * talkbackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        talkbackButton.frame = CGRectMake(0, 5, 50, 30);
+        talkbackButton.tag = indexPath.row;
+        [talkbackButton addTarget:self action:@selector(handleTalkbackButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        cell.accessoryView = talkbackButton;
     }
     
     return cell;
@@ -111,6 +126,16 @@
     [self.navigationController pushViewController:chatViewController animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)handleTalkbackButtonClicked:(id)sender
+{
+    UIButton * button = (UIButton *)sender;
+    ITalkerUserInfo * userInfo = [_friendArray objectAtIndex:button.tag];
+    ITalkerTalkbackViewController * talkbackViewController = [[ITalkerTalkbackViewController alloc] initWithNibName:@"ITalkerTalkbackViewController" bundle:nil];
+    talkbackViewController.chatToUserInfo = userInfo;
+
+    [self.navigationController pushViewController:talkbackViewController animated:YES];
 }
 
 @end

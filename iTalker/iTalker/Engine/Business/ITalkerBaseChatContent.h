@@ -11,17 +11,16 @@
 typedef enum {
     ITalkerChatContentTypeText,
     ITalkerChatContentTypeVoice,
-    ITalkerChatContentTypeImage
+    ITalkerChatContentTypeImage,
+    ITalkerChatContentTypeTalkback
 } ITalkerChatContentType;
 
 @interface ITalkerBaseChatContent : NSObject
-
-- (id)initWithType:(ITalkerChatContentType)type;
 
 - (NSData *)serialize;
 
 - (NSInteger)deserialize:(NSData *)data;
 
-@property (readonly, nonatomic) ITalkerChatContentType contentType;
+@property (nonatomic) ITalkerChatContentType contentType;
 
 @end

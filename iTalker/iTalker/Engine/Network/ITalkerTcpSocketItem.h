@@ -28,6 +28,6 @@ typedef NSInteger ITalkerTcpSocketId;
 
 @property (strong, nonatomic) NSMutableData * data;
 
-@property (nonatomic) NSInteger totalLength;
+@property (nonatomic) NSInteger nextPackageLength;
 
 @end

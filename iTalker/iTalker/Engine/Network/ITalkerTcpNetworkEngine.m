@@ -49,6 +49,7 @@ static NSInteger staticIdCount = 0;
     ITalkerTcpSocketItem * item = [self findSocketItemById:socketId];
     if (item) {
         NSData * networkData = [ITalkerNetworkUtils encodeNetworkDataByData:data];
+        NSLog(@"sendData %d", networkData.length);
         [item.socket writeData:networkData withTimeout:kNetworkTimeOut tag:kSendTcpTag];
     }
 }
@@ -85,7 +86,13 @@ static NSInteger staticIdCount = 0;
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
-    
+    ITalkerTcpSocketItem * item = [self findSocketItemBySocket:sock];
+    if (item) {
+        if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleTcpEvent:ForSocketId:)]) {
+            [_networkDelegate handleTcpEvent:ITalkerTcpNetworkEventDisconnected ForSocketId:item.socketId];
+        }
+        [_socketItemArray removeObject:item];
+    }
 }
 
 - (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket
@@ -115,26 +122,31 @@ static NSInteger staticIdCount = 0;
 {
     if (_networkDelegate && [_networkDelegate respondsToSelector:@selector(handleTcpData:FromSocketId:)]) {
         ITalkerTcpSocketItem * item = [self findSocketItemBySocket:sock];
-        if (item) {            
-            if (item.data == nil) {
-                // Receive the first TCP package
-                NSInteger bytesOfHeader = 0;
-                NSInteger total = [ITalkerNetworkUtils decodeLengthByNetworkData:data From:0 AndLength:&bytesOfHeader];
-                
-                item.totalLength = total;
-                item.data = [NSMutableData dataWithData:[data subdataWithRange:NSMakeRange(bytesOfHeader, [data length] - bytesOfHeader)]];
-            } else {
-                // Receive other TCP packages
-                [item.data appendData:data];
-            }
+        if (item) {
+            [item.data appendData:data];
+            [self parseData:item];
             
-            if (item.data.length == item.totalLength) {
-                [_networkDelegate handleTcpData:item.data FromSocketId:item.socketId];
-                item.data = nil;
-                item.totalLength = 0;
-            }
             [item.socket readDataWithTimeout:-1 tag:kReceiveTcpTag];
         }
+    }
+}
+
+- (void)parseData:(ITalkerTcpSocketItem *)item
+{
+    if (item.nextPackageLength == -1 && item.data.length > sizeof(NSInteger)) {
+        NSInteger bytesOfHeader = 0;
+        NSInteger total = [ITalkerNetworkUtils decodeLengthByNetworkData:item.data From:0 AndLength:&bytesOfHeader];
+        
+        item.nextPackageLength = total;
+        [item.data replaceBytesInRange:NSMakeRange(0, bytesOfHeader) withBytes:NULL length:0];
+    }
+    
+    if (item.data.length >= item.nextPackageLength) {
+        [_networkDelegate handleTcpData:[item.data subdataWithRange:NSMakeRange(0, item.nextPackageLength)] FromSocketId:item.socketId];
+        [item.data replaceBytesInRange:NSMakeRange(0, item.nextPackageLength) withBytes:NULL length:0];
+        item.nextPackageLength = -1;
+
+        [self parseData:item];
     }
 }
 

@@ -16,6 +16,8 @@
     if (self) {
         _socket = socket;
         _socketId = socketId;
+        _data = [[NSMutableData alloc] init];
+        _nextPackageLength = -1;
     }
     return self;
 }

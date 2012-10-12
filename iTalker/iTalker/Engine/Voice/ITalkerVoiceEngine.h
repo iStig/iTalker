@@ -11,11 +11,25 @@
 
 #import "ITalkerVoiceFileManager.h"
 
-@interface ITalkerVoiceEngine : NSObject {
+typedef enum {
+    ITalkerVoiceEventPlayFinished,
+    ITalkerVoiceEventRecordFinished
+} ITalkerVoiceEvent;
+
+@protocol ITalkerVoiceEngineDelegate <NSObject>
+
+@optional
+- (void)handleVoiceEvent:(ITalkerVoiceEvent)event;
+
+@end
+
+@interface ITalkerVoiceEngine : NSObject <AVAudioPlayerDelegate> {
     AVAudioRecorder * _recorder;
     AVAudioPlayer * _player;
     ITalkerVoiceRecordId _curRecordId;
 }
+
+@property (assign, nonatomic) id<ITalkerVoiceEngineDelegate> voiceDelegate;
 
 + (ITalkerVoiceEngine *)getInstance;
 
@@ -26,5 +40,7 @@
 - (void)playVoiceByFileId:(ITalkerVoiceRecordId)voiceId;
 
 - (void)playVoiceByData:(NSData *)data;
+
+- (void)stopPlay;
 
 @end

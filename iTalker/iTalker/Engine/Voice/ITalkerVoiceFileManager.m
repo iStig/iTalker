@@ -45,7 +45,7 @@ static ITalkerVoiceFileManager * instance;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    NSString * newFilename = [NSString stringWithFormat:@"VoiceFile_%d.caf", _nextId];
+    NSString * newFilename = [NSString stringWithFormat:@"VoiceFile_%d.m4a", _nextId];
     *filename = [documentsDirectory stringByAppendingPathComponent:newFilename];
     
     return _nextId++;
@@ -56,7 +56,7 @@ static ITalkerVoiceFileManager * instance;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 
-    NSString * newFilename = [NSString stringWithFormat:@"VoiceFile_%d.caf", recordId];
+    NSString * newFilename = [NSString stringWithFormat:@"VoiceFile_%d.m4a", recordId];
     return [documentsDirectory stringByAppendingPathComponent:newFilename];
 }
 

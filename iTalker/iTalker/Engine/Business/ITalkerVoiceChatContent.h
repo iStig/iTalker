@@ -13,7 +13,7 @@
 
 - (id)initWithData:(NSData *)data;
 
-- (id)initWIthVoiceFileName:(NSString *)filename;
+- (id)initWithVoiceFileName:(NSString *)filename;
 
 @property (readonly, nonatomic) NSData * voiceData;
 

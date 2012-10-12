@@ -14,6 +14,7 @@
 #import "JSONKit.h"
 #import "ITalkerVoiceChatContent.h"
 #import "ITalkerNetworkUtils.h"
+#import "ITalkerTalkbackChatContent.h"
 
 #define kTalkContentKeyUserInfo                     @"userinfo"
 #define kTalkContentKeyContentType                  @"contenttype"
@@ -95,6 +96,7 @@ static ITalkerChatEngine * instance;
 
 - (void)handleTcpData:(NSData *)data FromSocketId:(ITalkerTcpSocketId)socketId
 {
+    NSLog(@"handleTcpData");
     if (socketId == _currentSocketId) {
         if (_chatDelegate && [_chatDelegate respondsToSelector:@selector(handleNewMessage:From:)]) {
             NSInteger length = 0;
@@ -125,6 +127,12 @@ static ITalkerChatEngine * instance;
                     [_chatDelegate handleNewMessage:chatContent From:_currentTalkToUserInfo];
                     break;
                 }
+                case ITalkerChatContentTypeTalkback:
+                {
+                    ITalkerTalkbackChatContent * chatContent = [[ITalkerTalkbackChatContent alloc] initWithData:chatData];
+                    [_chatDelegate handleNewMessage:chatContent From:_currentTalkToUserInfo];
+                    break;
+                }
                 default:
                     break;
             }
@@ -139,7 +147,15 @@ static ITalkerChatEngine * instance;
 
 - (void)handleTcpEvent:(ITalkerTcpNetworkEvent)event ForSocketId:(ITalkerTcpSocketId)socketId
 {
-    
+    switch (event) {
+        case ITalkerTcpNetworkEventDisconnected:
+            _currentSocketId = kITalkerInvalidSocketId;
+            _currentTalkToUserInfo = nil;
+            break;
+            
+        default:
+            break;
+    }
 }
 
 

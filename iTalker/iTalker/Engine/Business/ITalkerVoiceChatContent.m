@@ -13,17 +13,19 @@
 
 - (id)initWithData:(NSData *)data
 {
-    self = [super initWithType:ITalkerChatContentTypeVoice];
+    self = [super init];
     if (self) {
+        self.contentType = ITalkerChatContentTypeVoice;
         [self deserialize:data];
     }
     return self;
 }
 
-- (id)initWIthVoiceFileName:(NSString *)filename
+- (id)initWithVoiceFileName:(NSString *)filename
 {
-    self = [super initWithType:ITalkerChatContentTypeVoice];
+    self = [super init];
     if (self) {
+        self.contentType = ITalkerChatContentTypeVoice;
         _voiceData = [NSData dataWithContentsOfFile:filename];
     }
     return self;

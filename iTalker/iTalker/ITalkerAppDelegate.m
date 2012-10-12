@@ -13,6 +13,7 @@
 #import "ITalkerUserInfo.h"
 #import "ITalkerAccountManager.h"
 #import "ITalkerChatEngine.h"
+#import "ITalkerTalkbackViewController.h"
 
 @implementation ITalkerAppDelegate
 
@@ -32,6 +33,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     ITalkerFriendListViewController * mainViewController = [[ITalkerFriendListViewController alloc] initWithNibName:@"ITalkerFriendListViewController" bundle:nil];
+    //ITalkerChatViewController * mainViewController = [[ITalkerChatViewController alloc] initWithNibName:@"ITalkerChatViewController" bundle:nil];
+    //ITalkerTalkbackViewController * mainViewController = [[ITalkerTalkbackViewController alloc] initWithNibName:@"ITalkerTalkbackViewController" bundle:nil];
     
     UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
 

@@ -56,12 +56,9 @@ static ITalkerVoiceEngine * instance = nil;
     NSMutableDictionary *recordSettings =
     [[NSMutableDictionary alloc] initWithCapacity:10];
     
-    [recordSettings setObject:[NSNumber numberWithInt: kAudioFormatLinearPCM] forKey: AVFormatIDKey];
+    [recordSettings setObject:[NSNumber numberWithInt: kAudioFormatMPEG4AAC] forKey: AVFormatIDKey];
     [recordSettings setObject:[NSNumber numberWithFloat:44100.0] forKey: AVSampleRateKey];
     [recordSettings setObject:[NSNumber numberWithInt:1] forKey:AVNumberOfChannelsKey];
-    [recordSettings setObject:[NSNumber numberWithInt:14] forKey:AVLinearPCMBitDepthKey];
-    [recordSettings setObject:[NSNumber numberWithBool:YES] forKey:AVLinearPCMIsBigEndianKey];
-    [recordSettings setObject:[NSNumber numberWithBool:YES] forKey:AVLinearPCMIsFloatKey];
     
     if (_recorder) {
         _recorder = nil;
@@ -108,11 +105,13 @@ static ITalkerVoiceEngine * instance = nil;
     [self initAudioSession];
     
     _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    
     if (error) {
         NSLog(@"playVoice error = %@", error.localizedDescription);
         return;
     }
     
+    [_player setDelegate:self];
     [_player prepareToPlay];
     [_player play];
 
@@ -129,14 +128,30 @@ static ITalkerVoiceEngine * instance = nil;
     [self initAudioSession];
     
     _player = [[AVAudioPlayer alloc] initWithData:data error:&error];
+
     if (error) {
         NSLog(@"playVoice error = %@", error.localizedDescription);
         return;
     }
-    
+    [_player setDelegate:self];
     [_player prepareToPlay];
+    
+    NSLog(@"start play the sound");
     [_player play];
+    NSLog(@"after play");
+}
 
+- (void)stopPlay
+{
+    [_player stop];
+    _player = nil;
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    if (_voiceDelegate && [_voiceDelegate respondsToSelector:@selector(handleVoiceEvent:)]) {
+        [_voiceDelegate handleVoiceEvent:ITalkerVoiceEventPlayFinished];
+    }
 }
 
 @end

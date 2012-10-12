@@ -13,9 +13,9 @@
 
 - (id)init
 {
-    self = [super initWithType:ITalkerChatContentTypeText];
+    self = [super init];
     if (self) {
-        
+        self.contentType = ITalkerChatContentTypeText;
     }
     
     return self;

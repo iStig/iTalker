@@ -28,8 +28,6 @@
         
         _tapGestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
         [_tapGestureRec setDelegate:self];
-        
-        _longPressGestureRec = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     }
     return self;
 }
@@ -40,7 +38,6 @@
     [_chatTableView setDelegate:self];
     [_chatTableView setDataSource:self];
     [_chatTableView addGestureRecognizer:_tapGestureRec];
-    [_speechButton addGestureRecognizer:_longPressGestureRec];
     
     [_chatInputField setTag:kITalkerChatViewInputFieldTag];
     [_chatInputField setDelegate:self];
@@ -56,27 +53,35 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
--(void)handleLongPressGesture:(UIGestureRecognizer*)gestureRecognizer
+- (void)addChatContent:(ITalkerBaseChatContent *)chatContent
 {
-    if (gestureRecognizer == _longPressGestureRec) {
-        switch (gestureRecognizer.state) {
-            case UIGestureRecognizerStateBegan:
-            {
-                [[ITalkerVoiceEngine getInstance] recordVoice];
-                break;
-            }
-            case UIGestureRecognizerStateEnded:
-            {
-                ITalkerVoiceRecordId recordId = [[ITalkerVoiceEngine getInstance] stopRecordVoice];
-                NSString * filename = [[ITalkerVoiceFileManager getInstance] getFileNameById:recordId];
-                ITalkerVoiceChatContent * content = [[ITalkerVoiceChatContent alloc] initWIthVoiceFileName:filename];
-                [[ITalkerChatEngine getInstance] talk:content];
-                break;
-            }
-            default:
-                break;
+    if (chatContent.contentType == ITalkerChatContentTypeText ||
+        chatContent.contentType == ITalkerChatContentTypeVoice ||
+        chatContent.contentType == ITalkerChatContentTypeImage) {
+        [_chatContentArray addObject:chatContent];
+        
+        if (self.view && _chatTableView) {
+            NSArray * array = [NSArray arrayWithObjects:[NSIndexPath indexPathForRow:(_chatContentArray.count - 1) inSection:0], nil];
+            
+            [_chatTableView beginUpdates];
+            [_chatTableView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
+            [_chatTableView endUpdates];
         }
     }
+
+}
+
+- (IBAction)handleSpeechButtonPressed:(id)sender
+{
+    [[ITalkerVoiceEngine getInstance] recordVoice];
+}
+
+- (IBAction)handleSpeechButtonReleased:(id)sender
+{
+    ITalkerVoiceRecordId recordId = [[ITalkerVoiceEngine getInstance] stopRecordVoice];
+    NSString * filename = [[ITalkerVoiceFileManager getInstance] getFileNameById:recordId];
+    ITalkerVoiceChatContent * content = [[ITalkerVoiceChatContent alloc] initWithVoiceFileName:filename];
+    [[ITalkerChatEngine getInstance] talk:content];
 }
 
 - (IBAction)handleSendButtonClicked:(id)sender
@@ -135,12 +140,7 @@
 
 - (void)handleNewMessage:(ITalkerBaseChatContent *)message From:(ITalkerUserInfo *)userInfo
 {
-    [_chatContentArray addObject:message];
-    NSArray * array = [NSArray arrayWithObjects:[NSIndexPath indexPathForRow:(_chatContentArray.count - 1) inSection:0], nil];
-    
-    [_chatTableView beginUpdates];
-    [_chatTableView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
-    [_chatTableView endUpdates];
+    [self addChatContent:message];
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField

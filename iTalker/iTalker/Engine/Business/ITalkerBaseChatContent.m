@@ -11,16 +11,6 @@
 
 @implementation ITalkerBaseChatContent
 
-- (id)initWithType:(ITalkerChatContentType)type
-{
-    self = [super init];
-    if (self) {
-        _contentType = type;
-    }
-    
-    return self;
-}
-
 - (NSData *)serialize
 {
     return [ITalkerNetworkUtils encodeNetworkDataByInt:_contentType];
