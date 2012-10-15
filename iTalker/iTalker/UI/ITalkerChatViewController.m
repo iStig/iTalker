@@ -81,13 +81,13 @@
     ITalkerVoiceRecordId recordId = [[ITalkerVoiceEngine getInstance] stopRecordVoice];
     NSString * filename = [[ITalkerVoiceFileManager getInstance] getFileNameById:recordId];
     ITalkerVoiceChatContent * content = [[ITalkerVoiceChatContent alloc] initWithVoiceFileName:filename];
-    [[ITalkerChatEngine getInstance] talk:content];
+    [[ITalkerChatEngine getInstance] talk:content ToUser:_chatToUserInfo];
 }
 
 - (IBAction)handleSendButtonClicked:(id)sender
 {
     ITalkerTextChatContent * content = [[ITalkerTextChatContent alloc] initWithString:_chatInputField.text];
-    [[ITalkerChatEngine getInstance] talk:content];
+    [[ITalkerChatEngine getInstance] talk:content ToUser:_chatToUserInfo];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

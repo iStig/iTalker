@@ -44,4 +44,13 @@
     return NO;
 }
 
+- (BOOL)isEqualToUserInfo:(ITalkerUserInfo *)userInfo
+{
+    if ([userInfo.IpAddr isEqualToString:_IpAddr] &&
+        [userInfo.userId isEqualToString:_userId]) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

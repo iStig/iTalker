@@ -15,6 +15,7 @@
 #import "ITalkerVoiceChatContent.h"
 #import "ITalkerNetworkUtils.h"
 #import "ITalkerTalkbackChatContent.h"
+#import "ITalkerChatItem.h"
 
 #define kTalkContentKeyUserInfo                     @"userinfo"
 #define kTalkContentKeyContentType                  @"contenttype"
@@ -49,110 +50,152 @@ static ITalkerChatEngine * instance;
         _networkEngine = [[ITalkerTcpNetworkEngine alloc] init];
         [_networkEngine acceptPort:kChatAcceptPort];
         _networkEngine.networkDelegate = self;
-        _currentSocketId = kITalkerInvalidSocketId;
-        _currentTalkToUserInfo = nil;
+        _chatArray = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 #pragma mark - chat methods
 
-- (void)startChatWith:(ITalkerUserInfo *)userInfo
+- (BOOL)startChatWith:(ITalkerUserInfo *)userInfo
 {
-    if (_currentSocketId == kITalkerInvalidSocketId) {
-        _currentSocketId = [_networkEngine connectHost:userInfo.IpAddr OnPort:kChatAcceptPort];
-        _currentTalkToUserInfo = userInfo;
+    if ([self findChatItemByUserInfo:userInfo] != nil) {
+        return YES;
     }
+    
+    ITalkerTcpSocketId socketId = [_networkEngine connectHost:userInfo.IpAddr OnPort:kChatAcceptPort];
+    if (socketId == kITalkerInvalidSocketId) {
+        return NO;
+    }
+    
+    ITalkerChatItem * newItem = [[ITalkerChatItem alloc] init];
+    newItem.socketId = socketId;
+    newItem.chatToUserInfo = userInfo;
+    [_chatArray addObject:newItem];
+    return YES;
 }
 
 - (void)stopChatWith:(ITalkerUserInfo *)userInfo
 {
-    if (_currentSocketId != kITalkerInvalidSocketId) {
-        [_networkEngine disconnectSocketById:_currentSocketId];
-        _currentTalkToUserInfo = nil;
-    }
-}
-
-- (void)talk:(ITalkerBaseChatContent *)message
-{
-    if (message == nil && _currentSocketId == kITalkerInvalidSocketId) {
+    ITalkerChatItem * item = [self findChatItemByUserInfo:userInfo];
+    if (item == nil) {
         return;
     }
-    NSMutableData * data = [[NSMutableData alloc] init];
-    [data appendData:[ITalkerNetworkUtils encodeNetworkDataByData:[[_currentTalkToUserInfo serialize] JSONData]]];
-    [data appendData:[message serialize]];
     
-    [self sendData:data];
+    [_networkEngine disconnectSocketById:item.socketId];
+    [_chatArray removeObject:item];
 }
 
-- (void)sendData:(NSData *)data
+- (void)talk:(ITalkerBaseChatContent *)message ToUser:(ITalkerUserInfo *)userInfo
 {
-    if (_currentSocketId != kITalkerInvalidSocketId) {
-        [_networkEngine sendData:data FromSocketById:_currentSocketId];
+    ITalkerChatItem * item = [self findChatItemByUserInfo:userInfo];
+    if (message == nil || item == nil) {
+        return;
     }
+    
+    NSMutableData * data = [[NSMutableData alloc] init];
+    [data appendData:[ITalkerNetworkUtils encodeNetworkDataByData:[[[ITalkerAccountManager currentUser] serialize] JSONData]]];
+    [data appendData:[message serialize]];
+
+    [_networkEngine sendData:data FromSocketById:item.socketId];
+}
+
+- (ITalkerChatItem *)findChatItemByUserInfo:(ITalkerUserInfo *)userInfo
+{
+    if (userInfo == nil) {
+        return nil;
+    }
+    
+    for (ITalkerChatItem * item in _chatArray) {
+        if ([item.chatToUserInfo isEqualToUserInfo:userInfo]) {
+            return item;
+        }
+    }
+    return nil;
+}
+
+- (ITalkerChatItem *)findChatItemBySocketId:(ITalkerTcpSocketId)socketId
+{
+    for (ITalkerChatItem * item in _chatArray) {
+        if (item.socketId == socketId) {
+            return item;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - tcp network delegate methods
 
 - (void)handleTcpData:(NSData *)data FromSocketId:(ITalkerTcpSocketId)socketId
 {
-    NSLog(@"handleTcpData");
-    if (socketId == _currentSocketId) {
-        if (_chatDelegate && [_chatDelegate respondsToSelector:@selector(handleNewMessage:From:)]) {
-            NSInteger length = 0;
-            NSData * userInfoData = [ITalkerNetworkUtils decodeDataByNetworkData:data From:0 AndLength:&length];
-            
-            NSData * chatData = [data subdataWithRange:NSMakeRange(length, [data length] - length)];
-            NSDictionary * userInfoDic = [[JSONDecoder decoder] objectWithData:userInfoData];
-            
-            if (_currentTalkToUserInfo != nil) {
-                _currentTalkToUserInfo = nil;
+    ITalkerChatItem * item = [self findChatItemBySocketId:socketId];
+    if (item == nil) {
+        return;
+    }
+    
+    if (_chatDelegate && [_chatDelegate respondsToSelector:@selector(handleNewMessage:From:)]) {
+        NSInteger length = 0;
+        NSData * userInfoData = [ITalkerNetworkUtils decodeDataByNetworkData:data From:0 AndLength:&length];
+        
+        NSData * chatData = [data subdataWithRange:NSMakeRange(length, [data length] - length)];
+        NSDictionary * userInfoDic = [[JSONDecoder decoder] objectWithData:userInfoData];
+        
+        if (item.chatToUserInfo == nil) {
+            item.chatToUserInfo = [[ITalkerUserInfo alloc] init];
+            [item.chatToUserInfo deserialize:userInfoDic];
+        }
+        
+        ITalkerBaseChatContent * content = [[ITalkerBaseChatContent alloc] init];
+        [content deserialize:chatData];
+        
+        switch (content.contentType) {
+            case ITalkerChatContentTypeText:
+            {
+                ITalkerTextChatContent * chatContent = [[ITalkerTextChatContent alloc] initWithData:chatData];
+                [item.chatContentArray addObject:chatContent];
+                [_chatDelegate handleNewMessage:chatContent From:item.chatToUserInfo];
+                break;
             }
-            _currentTalkToUserInfo = [[ITalkerUserInfo alloc] init];
-            [_currentTalkToUserInfo deserialize:userInfoDic];
-            
-            ITalkerBaseChatContent * content = [[ITalkerBaseChatContent alloc] init];
-            [content deserialize:chatData];
-            
-            switch (content.contentType) {
-                case ITalkerChatContentTypeText:
-                {
-                    ITalkerTextChatContent * chatContent = [[ITalkerTextChatContent alloc] initWithData:chatData];
-                    [_chatDelegate handleNewMessage:chatContent From:_currentTalkToUserInfo];
-                    break;
-                }
-                case ITalkerChatContentTypeVoice:
-                {
-                    ITalkerVoiceChatContent * chatContent = [[ITalkerVoiceChatContent alloc] initWithData:chatData];
-                    [_chatDelegate handleNewMessage:chatContent From:_currentTalkToUserInfo];
-                    break;
-                }
-                case ITalkerChatContentTypeTalkback:
-                {
-                    ITalkerTalkbackChatContent * chatContent = [[ITalkerTalkbackChatContent alloc] initWithData:chatData];
-                    [_chatDelegate handleNewMessage:chatContent From:_currentTalkToUserInfo];
-                    break;
-                }
-                default:
-                    break;
+            case ITalkerChatContentTypeVoice:
+            {
+                ITalkerVoiceChatContent * chatContent = [[ITalkerVoiceChatContent alloc] initWithData:chatData];
+                [item.chatContentArray addObject:chatContent];
+                [_chatDelegate handleNewMessage:chatContent From:item.chatToUserInfo];
+                break;
             }
+            case ITalkerChatContentTypeTalkback:
+            {
+                ITalkerTalkbackChatContent * chatContent = [[ITalkerTalkbackChatContent alloc] initWithData:chatData];
+                [item.chatContentArray addObject:chatContent];
+                [_chatDelegate handleNewMessage:chatContent From:item.chatToUserInfo];
+                break;
+            }
+            default:
+                break;
         }
     }
 }
 
 - (void)handleAcceptNewSocket:(ITalkerTcpSocketId)newSocketId
 {
-    _currentSocketId = newSocketId;
+    if ([self findChatItemBySocketId:newSocketId] == nil) {
+        ITalkerChatItem * item = [[ITalkerChatItem alloc] init];
+        item.socketId = newSocketId;
+        [_chatArray addObject:item];
+    }
 }
 
 - (void)handleTcpEvent:(ITalkerTcpNetworkEvent)event ForSocketId:(ITalkerTcpSocketId)socketId
 {
     switch (event) {
         case ITalkerTcpNetworkEventDisconnected:
-            _currentSocketId = kITalkerInvalidSocketId;
-            _currentTalkToUserInfo = nil;
+        {
+            ITalkerChatItem * item = [self findChatItemBySocketId:socketId];
+            if (item) {
+                [_chatArray removeObject:item];
+            }
             break;
-            
+        }
         default:
             break;
     }

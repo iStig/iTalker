@@ -25,6 +25,7 @@ typedef enum {
     NSMutableArray * _voiceContentArray;
     NSTimer * _timer;
     ITalkerTalkbackState _state;
+    ITalkerUserInfo * _chatToUserInfo;
     NSInteger _contentIndexCount;
 }
 

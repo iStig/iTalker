@@ -10,4 +10,15 @@
 
 @implementation ITalkerChatItem
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _chatContentArray = [[NSMutableArray alloc] init];
+        _chatToUserInfo = nil;
+        _socketId = kITalkerInvalidSocketId;
+    }
+    return self;
+}
+
 @end

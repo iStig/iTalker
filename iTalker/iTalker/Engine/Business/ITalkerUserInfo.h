@@ -18,4 +18,6 @@
 
 - (BOOL)deserialize:(NSDictionary *)data;
 
+- (BOOL)isEqualToUserInfo:(ITalkerUserInfo *)userInfo;
+
 @end

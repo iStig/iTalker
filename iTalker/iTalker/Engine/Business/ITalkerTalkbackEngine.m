@@ -48,6 +48,7 @@
     
     _contentIndexCount = 0;
     _state = ITalkerTalkbackRecordState;
+    _chatToUserInfo = chatTo;
     
     if (_timer) {
         [_timer invalidate];
@@ -96,11 +97,12 @@
     
     if ((_state == ITalkerTalkbackRecordAndSendState || _state == ITalkerTalkbackSendState) && [_voiceContentArray count] > 0) {
         ITalkerTalkbackChatContent * content = (ITalkerTalkbackChatContent *)[_voiceContentArray objectAtIndex:0];
-        [[ITalkerChatEngine getInstance] talk:content];
+        [[ITalkerChatEngine getInstance] talk:content ToUser:_chatToUserInfo];
         NSLog(@"send content %d", content.contentIndex);
         [_voiceContentArray removeObjectAtIndex:0];
         if (content.contentIndex == kITalkerLastTalkbackContentIndex) {
             _state = ITalkerTalkbackIdleState;
+            _chatToUserInfo = nil;
         }
     }
     
